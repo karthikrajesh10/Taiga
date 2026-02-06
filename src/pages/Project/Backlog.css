@@ -1,0 +1,212 @@
+/* src/pages/Project/Backlog.css */
+
+.backlog {
+  padding: 24px 32px;
+  font-size: 14px;
+  color: #2e3440;
+}
+
+/* ===== HEADER ===== */
+.backlog__header h2 {
+  margin-bottom: 12px;
+}
+
+.backlog__stats {
+  background: #4c566a;
+  color: #fff;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.progress-box {
+  width: 120px;
+  height: 28px;
+  background: #fff;
+}
+
+.stats-text {
+  display: flex;
+  gap: 16px;
+  font-size: 13px;
+}
+
+.percent {
+  color: #7ff0df;
+  font-weight: 600;
+}
+
+/* ===== TOP SECTION ===== */
+.backlog__top {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  gap: 24px;
+  margin: 24px 0;
+}
+
+.graph-hint {
+  background: #f7f9fb;
+  padding: 16px;
+  display: flex;
+  gap: 16px;
+}
+
+.bars {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(#00a0b0, #7ff0df);
+}
+
+.link {
+  color: #00a0b0;
+  cursor: pointer;
+}
+
+.sprints h4 {
+  margin-bottom: 8px;
+}
+
+.empty-text {
+  color: #6b778c;
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: #00a0b0;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* ===== BACKLOG LIST ===== */
+.backlog__list {
+  margin-top: 24px;
+}
+
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.muted {
+  color: #6b778c;
+  font-size: 13px;
+}
+
+.list-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.primary-btn {
+  background: #7ff0df;
+  border: none;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+
+.icon-btn {
+  background: #e6eaef;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.list-toolbar {
+  display: flex;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.filter-btn {
+  background: #e6eaef;
+  border: none;
+  padding: 6px 10px;
+}
+
+.list-toolbar input {
+  padding: 6px 10px;
+  border: 1px solid #dfe1e6;
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-state {
+  text-align: center;
+  margin: 64px 0;
+}
+
+
+/* ===== STORY LIST ===== */
+.story-list {
+  margin-top: 16px;
+  border-top: 1px solid #e6eaef;
+}
+
+
+.story-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 12px;
+  border-bottom: 1px solid #e6eaef;
+  background: #fff;
+  font-size: 14px;
+}
+
+.story-row:hover {
+  background: #f7f9fb;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* LEFT SIDE */
+.story-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.drag {
+  cursor: grab;
+  color: #9aa4b2;
+}
+
+.story-id {
+  color: #00a0b0;
+  font-weight: 500;
+}
+
+.story-title {
+  color: #2e3440;
+}
+
+/* RIGHT SIDE */
+.story-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.story-status {
+  color: #4c566a;
+  cursor: pointer;
+}
+
+.story-points {
+  width: 28px;
+  height: 28px;
+  background: #f0f3f6;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+.story-menu {
+  cursor: pointer;
+  color: #6b778c;
+}
+

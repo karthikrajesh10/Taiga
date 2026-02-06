@@ -1,0 +1,102 @@
+.us-detail {
+  padding: 24px 32px;
+}
+
+/* HEADER */
+.us-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.us-header h1 {
+  margin: 0;
+}
+
+.us-status {
+  font-size: 14px;
+}
+
+.pill {
+  background: #e6eaef;
+  padding: 4px 8px;
+  margin-left: 6px;
+}
+
+/* META */
+.us-type {
+  font-size: 12px;
+  color: #6b778c;
+}
+
+.us-created {
+  margin: 8px 0 16px;
+  font-size: 13px;
+  color: #6b778c;
+}
+
+/* LAYOUT */
+.us-layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 24px;
+}
+
+/* LEFT */
+.us-desc {
+  margin: 16px 0;
+}
+
+.attachments,
+.tasks {
+  margin-top: 16px;
+}
+
+.attachments-header,
+.tasks-header {
+  display: flex;
+  justify-content: space-between;
+  background: #f4f5f7;
+  padding: 8px;
+}
+
+.dropzone {
+  border: 1px dashed #dfe1e6;
+  padding: 16px;
+  text-align: center;
+}
+
+.comments textarea {
+  width: 100%;
+  height: 120px;
+  margin-top: 8px;
+}
+
+/* RIGHT */
+.us-right {
+  background: #f9fafb;
+  padding: 16px;
+}
+
+.points div {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.points .total {
+  font-weight: bold;
+  border-top: 1px solid #e6eaef;
+  padding-top: 6px;
+}
+
+.assigned,
+.watchers {
+  margin-top: 16px;
+}
+
+.us-icons {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}

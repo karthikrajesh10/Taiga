@@ -1,0 +1,24 @@
+.dashboard {
+  max-width: 1100px;
+  margin: 32px auto;
+  padding: 0 16px;
+}
+
+.dashboard__title {
+  font-size: 28px;
+  color: #00a0b0;
+  margin-bottom: 16px;
+}
+
+.dashboard__content {
+  display: grid;
+  grid-template-columns: 1fr 1fr 280px;
+  gap: 32px;
+  margin-top: 24px;
+}
+
+.dashboard__hint {
+  font-size: 14px;
+  color: #4c566a;
+  margin-bottom: 16px;
+}

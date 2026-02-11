@@ -51,13 +51,29 @@
 
 // export default App;
 
+// import { BrowserRouter } from "react-router-dom";
+// import AppRoutes from "./routes/AppRoutes";
+
+// function App() {
+//   return (
+//     <BrowserRouter>
+//       <AppRoutes />
+//     </BrowserRouter>
+//   );
+// }
+
+// export default App;
+
 import { BrowserRouter } from "react-router-dom";
 import AppRoutes from "./routes/AppRoutes";
+import { AuthProvider } from "./context/AuthContext";
 
 function App() {
   return (
     <BrowserRouter>
-      <AppRoutes />
+      <AuthProvider>
+        <AppRoutes />
+      </AuthProvider>
     </BrowserRouter>
   );
 }

@@ -1,6 +1,8 @@
 // src/pages/Project/Issues.jsx
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { authFetch } from "../../services/api";
+import { useEffect } from "react";
 import IssueModal from "../../components/IssueModal/IssueModal";
 import "./Issues.css";
 
@@ -19,23 +21,47 @@ export default function Issues() {
 
   const onNewIssue = () => setShowModal(true);
   const onCloseModal = () => setShowModal(false);
+  const onCreateIssue = async (issue) => {
+      try {
+        const res = await authFetch("/issues/", {
+          method: "POST",
+          body: JSON.stringify({
+            subject: issue.subject,
+            description: issue.description,
+            type: issue.type,
+            severity: issue.severity,
+            priority: issue.priority,
+            project_slug: slug,
+          }),
+        });
 
-  const onCreateIssue = (issue) => {
-    setIssues((prev) => [
-      ...prev,
-      {
-        id: prev.length + 1,
-        status: "New",
-        modified: new Date().toLocaleDateString("en-GB", {
-          day: "2-digit",
-          month: "short",
-          year: "numeric",
-        }),
-        ...issue,
-      },
-    ]);
-    setShowModal(false);
-  };
+        if (!res.ok) throw new Error("Failed to create issue");
+
+        const created = await res.json();
+        setIssues((prev) => [...prev, created]);
+        setShowModal(false);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+  useEffect(() => {
+      const loadIssues = async () => {
+        try {
+          const res = await authFetch(
+            `/issues/?project__slug=${slug}`
+          );
+          if (res.ok) {
+            setIssues(await res.json());
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      };
+
+      loadIssues();
+    }, [slug]);
+
 
   return (
     <>
@@ -82,7 +108,7 @@ export default function Issues() {
         ) : (
           <div className="issues__list">
             {issues.map((issue) => (
-              <div key={issue.id} className="issues__row">
+              <div key={issue.ref} className="issues__row">
                 {/* TYPE */}
                 <span className={`dot ${issue.type}`} />
 
@@ -99,7 +125,7 @@ export default function Issues() {
                       navigate(`/project/${slug}/issue/${issue.id}`)
                     }
                   >
-                    #{issue.id} {issue.subject}
+                    #{issue.ref} {issue.subject}
               </span>
 
                 {/* STATUS */}
@@ -109,7 +135,11 @@ export default function Issues() {
 
                 {/* MODIFIED */}
                 <span className="issues__modified">
-                  {issue.modified}
+                  {new Date(issue.modified_at).toLocaleDateString("en-GB", {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                    })}
                 </span>
 
                 {/* ASSIGN */}

@@ -1,0 +1,124 @@
+/* src/components/InviteMemberModal/InviteMemberModal.css */
+
+.invite-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.invite-modal {
+  width: 700px;
+  background: #fff;
+  border-radius: 4px;
+  padding: 40px;
+  position: relative;
+  font-family: "Inter", sans-serif;
+}
+
+.invite-close {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  border: none;
+  background: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.invite-modal h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-weight: 500;
+}
+
+.email-input {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.email-input input {
+  width: 420px;
+  padding: 12px;
+  border: 1px solid #d3d3d3;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.add-btn {
+  width: 42px;
+  height: 42px;
+  background: #111;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.invite-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.invite-row span {
+  font-size: 14px;
+}
+
+.invite-row .remove {
+  background: none;
+  border: none;
+  color: #e53935;
+  cursor: pointer;
+}
+
+.invite-row select {
+  padding: 8px 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.invite-message {
+  width: 100%;
+  height: 100px;
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  resize: none;
+}
+
+.invite-btn {
+  width: 100%;
+  margin-top: 20px;
+  background: #008da1;
+  color: white;
+  padding: 14px;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.invite-btn:hover {
+  background: #007c8f;
+}
+
+.invite-error {
+  margin-top: 10px;
+  color: #d32f2f;
+  font-size: 14px;
+}
+
+.invite-hint {
+  text-align: center;
+  font-size: 12px;
+  margin-top: 12px;
+  color: #666;
+}

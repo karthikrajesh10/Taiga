@@ -100,3 +100,49 @@
   gap: 8px;
   margin-top: 16px;
 }
+
+.us-subject-input {
+  margin-left: 8px;
+  font-size: 1.1rem;
+  padding: 4px 6px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.us-desc-input {
+  width: 100%;
+  min-height: 120px;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  resize: vertical;
+}
+
+.us-save-bar {
+  margin: 12px 0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.save-btn {
+  background: #5ce0c4;
+  color: #003c32;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.save-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.us-icons button.danger {
+  color: #c0392b;
+}
+
+.us-icons button.danger:hover {
+  background: rgba(192, 57, 43, 0.1);
+}

@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { authFetch } from "../../services/api";
 import "./Sidebar.css";
 
 export default function Sidebar() {
   const [scrumOpen, setScrumOpen] = useState(false);
   const navigate = useNavigate();
   const { slug } = useParams();
+  const [sprints, setSprints] = useState([]);
+  const [project, setProject] = useState(null);
 
   const goToBacklog = () => navigate(`/project/${slug}/backlog`);
   const goToTimeline = () => navigate(`/project/${slug}/timeline`);
@@ -16,11 +19,63 @@ export default function Sidebar() {
   const goToWiki = () => {};
   const goToTeam = () => navigate(`/project/${slug}/team`);
   const goToSettings = () =>  navigate(`/project/${slug}/admin/project-profile/details`);
+  useEffect(() => {
+      if (!scrumOpen) return;
+
+      const loadSprints = async () => {
+        try {
+          const res = await authFetch(`/sprints/?project_slug=${slug}`);
+          if (res.ok) {
+            setSprints(await res.json());
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      };
+
+      loadSprints();
+    }, [scrumOpen, slug]);
+
+    
+
+  // useEffect(() => {
+  //       const loadProject = async () => {
+  //         try {
+  //           const res = await authFetch(`/projects/?slug=${slug}`);
+  //           if (!res.ok) throw new Error("Failed to load project");
+
+  //           const data = await res.json();
+  //           setProject(data[0]); 
+  //         } catch (err) {
+  //           console.error(err);
+  //         }
+  //       };
+
+  //       loadProject();
+  //     }, [slug]);
+  useEffect(() => {
+      const loadProject = async () => {
+        try {
+          const res = await authFetch(`/projects/?slug=${slug}`);
+          if (!res.ok) throw new Error("Failed to load project");
+
+          const data = await res.json();
+
+          const found = data.find(p => p.slug === slug);
+          setProject(found || null);
+        } catch (err) {
+          console.error(err);
+        }
+      };
+
+      loadProject();
+    }, [slug]);
+
 
   return (
     <aside className="sidebar">
       <div className="sidebar__project">
-        <span className="sidebar__project-name">Sample</span>
+        <span className="sidebar__project-name">{project ? project.name : "Loading…"}</span>
       </div>
 
       {/* SCRUM */}
@@ -36,12 +91,26 @@ export default function Sidebar() {
           <div className="sidebar__subitem" onClick={goToBacklog}>
             Backlog
           </div>
+
+          <div className="sidebar__subitem">Dashboard</div>
+
+          {sprints.map((sprint) => (
+            <div
+              key={sprint.id}
+              className="sidebar__subsubitem"
+              onClick={() =>
+                navigate(`/project/${slug}/taskboard/${sprint.id}`)
+              }
+            >
+              {sprint.name}
+            </div>
+          ))}
+
           <div className="sidebar__subitem" onClick={goToTimeline}>
             Timeline
           </div>
         </>
       )}
-
       {/* ISSUES */}
       <div className="sidebar__item" onClick={goToIssues}>
         Issues

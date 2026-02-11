@@ -12,18 +12,22 @@ export default function IssueModal({ onClose, onCreate }) {
 
   const [openMenu, setOpenMenu] = useState(null); // type | severity | priority
 
-  const handleCreate = () => {
-    if (!subject.trim()) return;
+  const [submitting, setSubmitting] = useState(false);
 
-    onCreate({
-      subject,
-      description,
-      type,
-      severity,
-      priority,
-      assignedToMe,
-    });
-  };
+const handleCreate = async () => {
+  if (!subject.trim() || submitting) return;
+
+  setSubmitting(true);
+  await onCreate({
+    subject,
+    description,
+    type,
+    severity,
+    priority,
+    assignedToMe,
+  });
+  setSubmitting(false);
+};
 
   const closeMenu = () => setOpenMenu(null);
 
@@ -64,8 +68,8 @@ export default function IssueModal({ onClose, onCreate }) {
               </div>
             </div>
 
-            <button className="create-btn" onClick={handleCreate}>
-              CREATE
+            <button className="create-btn" disabled={submitting} onClick={handleCreate}>
+              {submitting ? "CREATING..." : "CREATE"}
             </button>
           </div>
 

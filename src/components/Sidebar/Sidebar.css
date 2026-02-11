@@ -70,3 +70,14 @@
   color: #81a1c1;
   cursor: pointer;
 }
+
+.sidebar__subsubitem {
+  padding-left: 36px;
+  font-size: 13px;
+  cursor: pointer;
+  color: #9aa3ab;
+}
+
+.sidebar__subsubitem:hover {
+  color: #ffffff;
+}

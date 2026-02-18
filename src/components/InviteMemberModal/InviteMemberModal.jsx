@@ -1,6 +1,7 @@
 // src/components/InviteMemberModal/InviteMemberModal.jsx
 import { useState } from "react";
-import { authFetch } from "../../services/api";
+import { authFetch } from "../../services/authFetch";
+
 import "./InviteMemberModal.css";
 
 export default function InviteMemberModal({
@@ -22,25 +23,18 @@ export default function InviteMemberModal({
     setError("");
 
     try {
-      const res = await authFetch("/memberships/", {
+      const data = await authFetch("/memberships/", {
         method: "POST",
         body: JSON.stringify({
           project: projectId,
           user_email: email,
-          role,
         }),
       });
 
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data?.user_email || "Failed to add member");
-      }
-
-      const data = await res.json();
       onSuccess(data);
       onClose();
     } catch (err) {
-      setError(err.message);
+      setError(err.message || "Failed to add member");
     }
   };
 

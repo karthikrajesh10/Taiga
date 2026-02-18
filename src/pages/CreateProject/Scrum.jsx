@@ -175,7 +175,10 @@ import { useNavigate } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import ProjectVisibilityToggle from "../../components/ProjectVisibilityToggle/ProjectVisibilityToggle";
 import ProjectFooterActions from "../../components/ProjectFooterActions/ProjectFooterActions";
-import { authFetch } from "../../services/api";
+import { authFetch } from "../../services/authFetch";
+import { createProject } from "../../services/projectService";
+
+
 
 import "./ProjectForm.css";
 
@@ -211,22 +214,11 @@ export default function Scrum() {
     };
 
     try {
-      const res = await authFetch("/projects/", {
-        method: "POST",
-        body: JSON.stringify(payload),
-      });
+      const project = await createProject(payload);
 
-      if (!res.ok) {
-        throw new Error("Failed to create project");
-      }
-
-      const project = await res.json();
-
-      // ✅ Navigate to newly created project (Scrum → Backlog)
       navigate(`/project/${project.slug}/backlog`);
     } catch (err) {
-      console.error(err);
-      setError("Unable to create project. Try again.");
+      setError(err.message || "Unable to create project.");
     } finally {
       setLoading(false);
     }

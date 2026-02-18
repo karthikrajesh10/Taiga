@@ -421,7 +421,9 @@
 // src/pages/Settings/Members/Members.jsx
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { authFetch } from "../../../services/api";
+import { authFetch } from "../../../services/authFetch";
+
+
 import InviteMemberModal from "../../../components/InviteMemberModal/InviteMemberModal";
 import "./Members.css";
 

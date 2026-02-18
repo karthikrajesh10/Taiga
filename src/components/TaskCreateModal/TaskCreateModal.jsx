@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { authFetch } from "../../services/api";
+import { createTask } from "../../services/taskService";
+import { stringToStatusNumber } from "../../utils/statusMapping";
+
 import "./TaskCreateModal.css";
 
 export default function TaskCreateModal({
@@ -12,26 +14,19 @@ export default function TaskCreateModal({
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("New");
 
-  const createTask = async () => {
+  const handleCreateTask = async () => {
     if (!subject.trim()) return;
 
-    const res = await authFetch("/tasks/", {
-      method: "POST",
-      body: JSON.stringify({
-        subject,
-        description,
-        status,
-        project_slug: projectSlug,
-        userstory: userstoryId,
-      }),
-    });
-
-    if (res.ok) {
-      const task = await res.json();
-      onCreated(task);   // 🔥 inject into taskboard
+    try {
+      const task = await createTask({
+        user_story: userstoryId,
+        title: subject,
+        description: description,
+      });
+      onCreated(task);
       onClose();
-    } else {
-      console.error("Failed to create task");
+    } catch (err) {
+      console.error("Failed to create task", err);
     }
   };
 
@@ -97,7 +92,7 @@ export default function TaskCreateModal({
 
         {/* FOOTER */}
         <div className="taiga-modal-footer">
-          <button className="create-btn" onClick={createTask}>
+          <button className="create-btn" onClick={handleCreateTask}>
             CREATE
           </button>
         </div>

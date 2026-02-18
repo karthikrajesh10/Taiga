@@ -1,14 +1,23 @@
 // src/pages/Project/Issues.jsx
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { authFetch } from "../../services/api";
+// import { authFetch } from "../../services/api";
+import { authFetch } from "../../services/authFetch";
+
+
+
+
+
+
 import { useEffect } from "react";
 import IssueModal from "../../components/IssueModal/IssueModal";
+import { getTasksByStory } from "../../services/taskService";
 import "./Issues.css";
 
 export default function Issues() {
   const [showModal, setShowModal] = useState(false);
   const [issues, setIssues] = useState([]);
+  const [projectTasks, setProjectTasks] = useState([]);
 
   const navigate = useNavigate();
   const { slug } = useParams();
@@ -23,37 +32,35 @@ export default function Issues() {
   const onCloseModal = () => setShowModal(false);
   const onCreateIssue = async (issue) => {
       try {
-        const res = await authFetch("/issues/", {
+        if (!issue?.taskId) {
+          throw new Error("Task is required");
+        }
+
+        const created = await authFetch("/issues/", {
           method: "POST",
           body: JSON.stringify({
-            subject: issue.subject,
-            description: issue.description,
-            type: issue.type,
-            severity: issue.severity,
-            priority: issue.priority,
-            project_slug: slug,
+            task: Number(issue.taskId),
+            type: issue.type.charAt(0).toUpperCase() + issue.type.slice(1),
+            title: issue.title,
+            description: issue.description || "",
           }),
         });
 
-        if (!res.ok) throw new Error("Failed to create issue");
-
-        const created = await res.json();
         setIssues((prev) => [...prev, created]);
         setShowModal(false);
       } catch (err) {
         console.error(err);
+        throw err;
       }
     };
 
   useEffect(() => {
       const loadIssues = async () => {
         try {
-          const res = await authFetch(
-            `/issues/?project__slug=${slug}`
+          const issuesData = await authFetch(
+            `/issues/?project_slug=${slug}`
           );
-          if (res.ok) {
-            setIssues(await res.json());
-          }
+          setIssues(issuesData);
         } catch (err) {
           console.error(err);
         }
@@ -61,6 +68,29 @@ export default function Issues() {
 
       loadIssues();
     }, [slug]);
+
+  useEffect(() => {
+    const loadProjectTasks = async () => {
+      try {
+        // Try to fetch all stories for project, then tasks per story.
+        const stories = await authFetch(`/userstories/?project_slug=${slug}`);
+        const lists = await Promise.all(
+          (stories || []).map((s) => getTasksByStory(s.id))
+        );
+        const flat = lists.flat();
+
+        // Deduplicate by task id
+        const map = new Map();
+        flat.forEach((t) => map.set(t.id, t));
+        setProjectTasks([...map.values()]);
+      } catch (err) {
+        console.error(err);
+        setProjectTasks([]);
+      }
+    };
+
+    loadProjectTasks();
+  }, [slug]);
 
 
   return (
@@ -108,15 +138,9 @@ export default function Issues() {
         ) : (
           <div className="issues__list">
             {issues.map((issue) => (
-              <div key={issue.ref} className="issues__row">
+              <div key={issue.id} className="issues__row">
                 {/* TYPE */}
-                <span className={`dot ${issue.type}`} />
-
-                {/* SEVERITY */}
-                <span className={`dot prio-${issue.severity}`} />
-
-                {/* PRIORITY */}
-                <span className={`dot ${issue.priority}`} />
+                <span className={`dot ${issue.type?.toLowerCase() || 'bug'}`} />
 
                 {/* ISSUE */}
                 <span
@@ -125,21 +149,21 @@ export default function Issues() {
                       navigate(`/project/${slug}/issue/${issue.id}`)
                     }
                   >
-                    #{issue.ref} {issue.subject}
+                    #{issue.id} {issue.title}
               </span>
 
                 {/* STATUS */}
                 <span className="issues__status">
-                  {issue.status} ⌄
+                  {issue.status === 1 ? 'New' : issue.status === 2 ? 'In Progress' : issue.status === 3 ? 'Ready For Test' : 'Done'} ⌄
                 </span>
 
                 {/* MODIFIED */}
                 <span className="issues__modified">
-                  {new Date(issue.modified_at).toLocaleDateString("en-GB", {
+                  {issue.created_at ? new Date(issue.created_at).toLocaleDateString("en-GB", {
                       day: "2-digit",
                       month: "short",
                       year: "numeric",
-                    })}
+                    }) : ''}
                 </span>
 
                 {/* ASSIGN */}
@@ -155,6 +179,7 @@ export default function Issues() {
         <IssueModal
           onClose={onCloseModal}
           onCreate={onCreateIssue}
+          tasks={projectTasks}
         />
       )}
     </>

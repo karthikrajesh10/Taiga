@@ -169,7 +169,9 @@ import Tabs from "../../components/Tabs/Tabs";
 import SkeletonItem from "../../components/SkeletonItem/SkeletonItem";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { fetchProjects } from "../../services/projects";
+// import { fetchProjects } from "../../services/projects";
+import { getProjects } from "../../services/projectService";
+
 import "./Dashboard.css";
 
 export default function Dashboard() {
@@ -178,7 +180,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchProjects()
+    getProjects()
       .then(setProjects)
       .finally(() => setLoading(false));
   }, []);

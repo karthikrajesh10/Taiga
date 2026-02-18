@@ -1,6 +1,7 @@
 import { useState,useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { authFetch } from "../../services/api";
+import { authFetch } from "../../services/authFetch";
+
 import "./Sidebar.css";
 
 export default function Sidebar() {
@@ -24,10 +25,8 @@ export default function Sidebar() {
 
       const loadSprints = async () => {
         try {
-          const res = await authFetch(`/sprints/?project_slug=${slug}`);
-          if (res.ok) {
-            setSprints(await res.json());
-          }
+          const sprintsData = await authFetch(`/sprints/?project_slug=${slug}`);
+          setSprints(sprintsData);
         } catch (err) {
           console.error(err);
         }
@@ -56,13 +55,14 @@ export default function Sidebar() {
   useEffect(() => {
       const loadProject = async () => {
         try {
-          const res = await authFetch(`/projects/?slug=${slug}`);
-          if (!res.ok) throw new Error("Failed to load project");
+          const data = await authFetch(`/projects/?slug=${slug}`);
+          if (Array.isArray(data)) {
+            const bySlug = data.find((p) => p.slug === slug);
+            setProject(bySlug || data[0] || null);
+          } else {
+            setProject(data || null);
+          }
 
-          const data = await res.json();
-
-          const found = data.find(p => p.slug === slug);
-          setProject(found || null);
         } catch (err) {
           console.error(err);
         }

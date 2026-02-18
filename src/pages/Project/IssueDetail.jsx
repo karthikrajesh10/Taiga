@@ -108,7 +108,8 @@
 // }
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { authFetch } from "../../services/api";
+import { authFetch } from "../../services/authFetch";
+
 import "./IssueDetail.css";
 
 const STATUS_OPTIONS = ["New", "In Progress", "Ready", "Closed"];
@@ -125,9 +126,8 @@ export default function IssueDetail() {
   useEffect(() => {
     const loadIssue = async () => {
       try {
-        const res = await authFetch(`/issues/${id}/`);
-        if (!res.ok) throw new Error("Failed to load issue");
-        setIssue(await res.json());
+        const issueData = await authFetch(`/issues/${id}/`);
+        setIssue(issueData);
       } catch (err) {
         console.error(err);
       } finally {
@@ -142,14 +142,13 @@ export default function IssueDetail() {
 
   const updateStatus = async (status) => {
     try {
-      const res = await authFetch(`/issues/${id}/`, {
-        method: "PATCH",
-        body: JSON.stringify({ status }),
-      });
+      const { updateIssue } = await import("../../services/issueService");
+      const { stringToStatusNumber } = await import("../../utils/statusMapping");
+      
+      const statusNumber = typeof status === 'string' ? stringToStatusNumber(status) : status;
+      await updateIssue(id, { status: statusNumber });
 
-      if (!res.ok) throw new Error("Failed to update status");
-
-      setIssue((prev) => ({ ...prev, status }));
+      setIssue((prev) => ({ ...prev, status: statusNumber }));
     } catch (err) {
       console.error(err);
     }
@@ -161,12 +160,8 @@ export default function IssueDetail() {
     if (!window.confirm("Delete this issue?")) return;
 
     try {
-      const res = await authFetch(`/issues/${id}/`, {
-        method: "DELETE",
-      });
-
-      if (!res.ok) throw new Error("Failed to delete issue");
-
+      const { deleteIssue: deleteIssueService } = await import("../../services/issueService");
+      await deleteIssueService(id);
       navigate(`/project/${slug}/issues`);
     } catch (err) {
       console.error(err);
@@ -181,7 +176,7 @@ export default function IssueDetail() {
       {/* ===== HEADER ===== */}
       <div className="issue-detail__header">
         <h1>
-          #{issue.ref} {issue.subject}
+          #{issue.id} {issue.title}
         </h1>
 
         <div className="issue-detail__status">
@@ -189,12 +184,13 @@ export default function IssueDetail() {
 
           <select
             className="status-pill"
-            value={issue.status}
-            onChange={(e) => updateStatus(e.target.value)}
+            value={issue.status || 1}
+            onChange={(e) => updateStatus(parseInt(e.target.value))}
           >
-            {STATUS_OPTIONS.map((s) => (
-              <option key={s}>{s}</option>
-            ))}
+            <option value={1}>New</option>
+            <option value={2}>In Progress</option>
+            <option value={3}>Ready For Test</option>
+            <option value={4}>Done</option>
           </select>
         </div>
       </div>
@@ -220,22 +216,10 @@ export default function IssueDetail() {
           <div className="meta-row">
             <span>type</span>
             <span className="meta-value">
-              {issue.type} <span className={`dot ${issue.type}`} />
-            </span>
-          </div>
-
-          <div className="meta-row">
-            <span>severity</span>
-            <span className="meta-value">
-              {issue.severity} <span className={`dot ${issue.severity}`} />
-            </span>
-          </div>
-
-          <div className="meta-row">
-            <span>priority</span>
-            <span className="meta-value">
-              {issue.priority}{" "}
-              <span className={`dot prio-${issue.priority}`} />
+              {issue.type || "Question"}{" "}
+              <span
+                className={`dot ${String(issue.type || "question").toLowerCase()}`}
+              />
             </span>
           </div>
 
@@ -243,7 +227,7 @@ export default function IssueDetail() {
 
           <div className="side-block">
             <strong>CREATED BY</strong>
-            <div>{issue.created_by_username}</div>
+            <div>{issue.created_by_username || issue.created_by || "-"}</div>
           </div>
 
           <div className="side-block">

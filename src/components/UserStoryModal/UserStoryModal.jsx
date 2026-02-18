@@ -268,6 +268,7 @@
 
 import { useState } from "react";
 import "./UserStoryModal.css";
+import { stringToStatusNumber, createSlug } from "../../utils/statusMapping";
 
 export default function UserStoryModal({ onClose, onCreate }) {
   const [subject, setSubject] = useState("");
@@ -283,9 +284,10 @@ export default function UserStoryModal({ onClose, onCreate }) {
 
     // ✅ Only send backend-relevant fields
     onCreate({
-      subject,
+      title: subject,
+      slug: createSlug(subject),
       description,
-      status,
+      priority: 1, // Default priority
     });
   };
 

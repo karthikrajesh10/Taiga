@@ -104,7 +104,13 @@ export default function Header({ variant = "public" }) {
     return (
       <header className="header header--dashboard">
         <div className="header__left">
-          <span className="header__logo">Projects</span>
+          <span
+            className="header__logo"
+            onClick={() => navigate("/dashboard")}
+            style={{ cursor: "pointer" }}
+          >
+            Projects
+          </span>
         </div>
 
         <div className="header__right">

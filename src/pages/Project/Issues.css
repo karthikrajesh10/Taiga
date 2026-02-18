@@ -95,11 +95,13 @@
 
 .issues__row {
   display: grid;
-  grid-template-columns: 24px 24px 24px 2fr 1fr 1fr 40px;
+  /* Current row renders: dot | title | status | date | assignee */
+  grid-template-columns: 24px minmax(280px, 1fr) 140px 160px 40px;
   align-items: center;
   padding: 12px;
   border-bottom: 1px solid #e6eaef;
   background: #fff;
+  column-gap: 12px;
 }
 
 .issues__row:hover {
@@ -133,6 +135,10 @@
 .issues__title.link {
   color: #0052cc;
   cursor: pointer;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .issues__title.link:hover {

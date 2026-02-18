@@ -211,6 +211,113 @@
 }
 
 
+/* ===== SPRINTS SECTION ===== */
+.backlog__sprints {
+  margin-top: 24px;
+  margin-bottom: 32px;
+}
+
+.backlog__sprints h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2e3440;
+  margin-bottom: 16px;
+}
+
+.sprints-empty {
+  padding: 24px;
+  text-align: center;
+  background: #f7f9fb;
+  border-radius: 6px;
+}
+
+.sprint-item {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 18px 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.sprint-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.sprint-header h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+}
+
+.sprint-dates {
+  font-size: 13px;
+  color: #6b778c;
+}
+
+.sprint-stories {
+  margin: 12px 0;
+  padding: 12px 0;
+  border-top: 1px solid #e6eaef;
+  border-bottom: 1px solid #e6eaef;
+}
+
+.sprint-story-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.sprint-story-link {
+  color: #00a0b0;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.sprint-story-link:hover {
+  text-decoration: underline;
+}
+
+.sprint-empty-text {
+  color: #6b778c;
+  font-size: 13px;
+  padding: 8px 0;
+}
+
+.remove-btn {
+  background: none;
+  border: none;
+  color: #dc2626;
+  cursor: pointer;
+  font-size: 13px;
+  padding: 4px 8px;
+}
+
+.remove-btn:hover {
+  text-decoration: underline;
+}
+
+.sprint-taskboard-btn {
+  margin-top: 12px;
+  background: #e5e7eb;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  color: #2e3440;
+}
+
+.sprint-taskboard-btn:hover {
+  background: #d1d5db;
+}
+
 /* When no sprints */
 .empty-text {
   padding: 18px;

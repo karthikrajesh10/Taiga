@@ -1,43 +1,163 @@
+// // // // import { useParams } from "react-router-dom";
+// // // // import "./UserStoryDetail.css";
+
+// // // // export default function UserStoryDetail() {
+// // // //   const { id } = useParams();
+
+// // // //   // later: fetch from global store / backend
+// // // //   const story = {
+// // // //     id,
+// // // //     subject: "Frontend",
+// // // //     description: "Create frontend",
+// // // //     createdBy: "admin",
+// // // //     createdAt: "03 Feb 2026 16:27",
+// // // //     status: "New",
+// // // //     points: {
+// // // //       ux: "?",
+// // // //       design: "?",
+// // // //       front: "?",
+// // // //       back: "?",
+// // // //       total: "?",
+// // // //     },
+// // // //     assigned: "admin",
+// // // //   };
+
+// // // //   return (
+// // // //     <div className="us-detail">
+// // // //       {/* HEADER */}
+// // // //       <div className="us-header">
+// // // //         <h1>#{story.id} {story.subject}</h1>
+
+// // // //         <div className="us-status">
+// // // //           OPEN <span className="pill">NEW ⌄</span>
+// // // //         </div>
+// // // //       </div>
+
+// // // //       <span className="us-type">USER STORY</span>
+
+// // // //       <div className="us-created">
+// // // //         Created by <b>{story.createdBy}</b>
+// // // //         <span>{story.createdAt}</span>
+// // // //       </div>
+
+// // // //       <div className="us-layout">
+// // // //         {/* LEFT */}
+// // // //         <div className="us-left">
+// // // //           <div className="tags">Add tag +</div>
+
+// // // //           <p className="us-desc">{story.description}</p>
+
+// // // //           {/* ATTACHMENTS */}
+// // // //           <div className="attachments">
+// // // //             <div className="attachments-header">
+// // // //               <span>0 Attachments</span>
+// // // //               <button>+</button>
+// // // //             </div>
+// // // //             <div className="dropzone">Drop attachments here!</div>
+// // // //           </div>
+
+// // // //           {/* TASKS */}
+// // // //           <div className="tasks">
+// // // //             <div className="tasks-header">
+// // // //               <span>Tasks</span>
+// // // //               <button>+</button>
+// // // //             </div>
+// // // //           </div>
+
+// // // //           {/* COMMENTS */}
+// // // //           <div className="comments">
+// // // //             <h4>0 Comments</h4>
+// // // //             <textarea placeholder="Type a new comment here" />
+// // // //           </div>
+// // // //         </div>
+
+// // // //         {/* RIGHT */}
+// // // //         <div className="us-right">
+// // // //           <div className="points">
+// // // //             <h4>POINTS</h4>
+// // // //             <div>UX <span>{story.points.ux}</span></div>
+// // // //             <div>Design <span>{story.points.design}</span></div>
+// // // //             <div>Front <span>{story.points.front}</span></div>
+// // // //             <div>Back <span>{story.points.back}</span></div>
+// // // //             <div className="total">
+// // // //               total points <span>{story.points.total}</span>
+// // // //             </div>
+// // // //           </div>
+
+// // // //           <div className="assigned">
+// // // //             <h4>ASSIGNED</h4>
+// // // //             <div className="assignee">{story.assigned}</div>
+// // // //             <button>+ Add assigned</button>
+// // // //           </div>
+
+// // // //           <div className="watchers">
+// // // //             <h4>WATCHERS</h4>
+// // // //             <button>+ Add watchers</button>
+// // // //             <button className="link">Watch</button>
+// // // //           </div>
+
+// // // //           <div className="us-icons">
+// // // //             <button>⏱</button>
+// // // //             <button>👥</button>
+// // // //             <button>📁</button>
+// // // //             <button>🔒</button>
+// // // //             <button>🗑</button>
+// // // //           </div>
+// // // //         </div>
+// // // //       </div>
+// // // //     </div>
+// // // //   );
+// // // // }
+
+// // // import { useEffect, useState } from "react";
 // // // import { useParams } from "react-router-dom";
+// // // import { authFetch } from "../../services/api";
 // // // import "./UserStoryDetail.css";
 
 // // // export default function UserStoryDetail() {
 // // //   const { id } = useParams();
+// // //   const [story, setStory] = useState(null);
+// // //   const [loading, setLoading] = useState(true);
 
-// // //   // later: fetch from global store / backend
-// // //   const story = {
-// // //     id,
-// // //     subject: "Frontend",
-// // //     description: "Create frontend",
-// // //     createdBy: "admin",
-// // //     createdAt: "03 Feb 2026 16:27",
-// // //     status: "New",
-// // //     points: {
-// // //       ux: "?",
-// // //       design: "?",
-// // //       front: "?",
-// // //       back: "?",
-// // //       total: "?",
-// // //     },
-// // //     assigned: "admin",
+// // //   useEffect(() => {
+// // //     loadStory();
+// // //   }, [id]);
+
+// // //   const loadStory = async () => {
+// // //     try {
+// // //       const res = await authFetch(`/userstories/${id}/`);
+// // //       if (!res.ok) throw new Error("Failed to load story");
+
+// // //       const data = await res.json();
+// // //       setStory(data);
+// // //     } catch (err) {
+// // //       console.error(err);
+// // //     } finally {
+// // //       setLoading(false);
+// // //     }
 // // //   };
+
+// // //   if (loading) return <div className="us-detail">Loading…</div>;
+// // //   if (!story) return <div className="us-detail">Not found</div>;
 
 // // //   return (
 // // //     <div className="us-detail">
 // // //       {/* HEADER */}
 // // //       <div className="us-header">
-// // //         <h1>#{story.id} {story.subject}</h1>
+// // //         <h1>
+// // //           #{story.id} {story.subject}
+// // //         </h1>
 
 // // //         <div className="us-status">
-// // //           OPEN <span className="pill">NEW ⌄</span>
+// // //           OPEN <span className="pill">{story.status} ⌄</span>
 // // //         </div>
 // // //       </div>
 
 // // //       <span className="us-type">USER STORY</span>
 
 // // //       <div className="us-created">
-// // //         Created by <b>{story.createdBy}</b>
-// // //         <span>{story.createdAt}</span>
+// // //         Created at{" "}
+// // //         <span>{new Date(story.created_at).toLocaleString()}</span>
 // // //       </div>
 
 // // //       <div className="us-layout">
@@ -45,7 +165,7 @@
 // // //         <div className="us-left">
 // // //           <div className="tags">Add tag +</div>
 
-// // //           <p className="us-desc">{story.description}</p>
+// // //           <p className="us-desc">{story.description || "No description"}</p>
 
 // // //           {/* ATTACHMENTS */}
 // // //           <div className="attachments">
@@ -54,14 +174,6 @@
 // // //               <button>+</button>
 // // //             </div>
 // // //             <div className="dropzone">Drop attachments here!</div>
-// // //           </div>
-
-// // //           {/* TASKS */}
-// // //           <div className="tasks">
-// // //             <div className="tasks-header">
-// // //               <span>Tasks</span>
-// // //               <button>+</button>
-// // //             </div>
 // // //           </div>
 
 // // //           {/* COMMENTS */}
@@ -75,18 +187,18 @@
 // // //         <div className="us-right">
 // // //           <div className="points">
 // // //             <h4>POINTS</h4>
-// // //             <div>UX <span>{story.points.ux}</span></div>
-// // //             <div>Design <span>{story.points.design}</span></div>
-// // //             <div>Front <span>{story.points.front}</span></div>
-// // //             <div>Back <span>{story.points.back}</span></div>
+// // //             <div>UX <span>?</span></div>
+// // //             <div>Design <span>?</span></div>
+// // //             <div>Front <span>?</span></div>
+// // //             <div>Back <span>?</span></div>
 // // //             <div className="total">
-// // //               total points <span>{story.points.total}</span>
+// // //               total points <span>?</span>
 // // //             </div>
 // // //           </div>
 
 // // //           <div className="assigned">
 // // //             <h4>ASSIGNED</h4>
-// // //             <div className="assignee">{story.assigned}</div>
+// // //             <div className="assignee">Unassigned</div>
 // // //             <button>+ Add assigned</button>
 // // //           </div>
 
@@ -114,10 +226,22 @@
 // // import { authFetch } from "../../services/api";
 // // import "./UserStoryDetail.css";
 
+// // const STATUS_OPTIONS = [
+// //   "New",
+// //   "Ready",
+// //   "In Progress",
+// //   "Done",
+// //   "Archived",
+// // ];
+
 // // export default function UserStoryDetail() {
 // //   const { id } = useParams();
 // //   const [story, setStory] = useState(null);
 // //   const [loading, setLoading] = useState(true);
+
+// //   const [subject, setSubject] = useState("");
+// //   const [description, setDescription] = useState("");
+// //   const [status, setStatus] = useState("");
 
 // //   useEffect(() => {
 // //     loadStory();
@@ -130,12 +254,50 @@
 
 // //       const data = await res.json();
 // //       setStory(data);
+// //       setSubject(data.subject || "");
+// //       setDescription(data.description || "");
+// //       setStatus(data.status || "New");
 // //     } catch (err) {
 // //       console.error(err);
 // //     } finally {
 // //       setLoading(false);
 // //     }
 // //   };
+
+// //   /* ================= PATCH HELPERS ================= */
+
+// //   const patchStory = async (payload) => {
+// //     try {
+// //       await authFetch(`/userstories/${id}/`, {
+// //         method: "PATCH",
+// //         body: JSON.stringify(payload),
+// //       });
+// //     } catch (err) {
+// //       console.error(err);
+// //     }
+// //   };
+
+// //   const onSubjectBlur = () => {
+// //     if (subject !== story.subject) {
+// //       patchStory({ subject });
+// //       setStory((s) => ({ ...s, subject }));
+// //     }
+// //   };
+
+// //   const onDescriptionBlur = () => {
+// //     if (description !== story.description) {
+// //       patchStory({ description });
+// //       setStory((s) => ({ ...s, description }));
+// //     }
+// //   };
+
+// //   const onStatusChange = (newStatus) => {
+// //     setStatus(newStatus);
+// //     patchStory({ status: newStatus });
+// //     setStory((s) => ({ ...s, status: newStatus }));
+// //   };
+
+// //   /* ================= RENDER ================= */
 
 // //   if (loading) return <div className="us-detail">Loading…</div>;
 // //   if (!story) return <div className="us-detail">Not found</div>;
@@ -145,11 +307,26 @@
 // //       {/* HEADER */}
 // //       <div className="us-header">
 // //         <h1>
-// //           #{story.id} {story.subject}
+// //           #{story.ref}{" "}
+// //           <input
+// //             className="us-subject-input"
+// //             value={subject}
+// //             onChange={(e) => setSubject(e.target.value)}
+// //             onBlur={onSubjectBlur}
+// //           />
 // //         </h1>
 
 // //         <div className="us-status">
-// //           OPEN <span className="pill">{story.status} ⌄</span>
+// //           OPEN{" "}
+// //           <select
+// //             className="pill"
+// //             value={status}
+// //             onChange={(e) => onStatusChange(e.target.value)}
+// //           >
+// //             {STATUS_OPTIONS.map((s) => (
+// //               <option key={s}>{s}</option>
+// //             ))}
+// //           </select>
 // //         </div>
 // //       </div>
 
@@ -165,7 +342,13 @@
 // //         <div className="us-left">
 // //           <div className="tags">Add tag +</div>
 
-// //           <p className="us-desc">{story.description || "No description"}</p>
+// //           <textarea
+// //             className="us-desc-input"
+// //             value={description}
+// //             onChange={(e) => setDescription(e.target.value)}
+// //             onBlur={onDescriptionBlur}
+// //             placeholder="Add a description"
+// //           />
 
 // //           {/* ATTACHMENTS */}
 // //           <div className="attachments">
@@ -222,26 +405,42 @@
 // // }
 
 // import { useEffect, useState } from "react";
-// import { useParams } from "react-router-dom";
-// import { authFetch } from "../../services/api";
+// import { useNavigate,useParams } from "react-router-dom";
+// // import { authFetch } from "../../services/authFetch";
 // import "./UserStoryDetail.css";
+// import {
+//   getStory,
+//   updateStory,
+//   deleteStory
+// } from "../../services/userStoryService";
+// import {
+//   getTasksByStory,
+//   createTask
+// } from "../../services/taskService";
 
-// const STATUS_OPTIONS = [
-//   "New",
-//   "Ready",
-//   "In Progress",
-//   "Done",
-//   "Archived",
-// ];
+
+
+// const STATUS_OPTIONS = ["New", "Ready", "In Progress", "Done", "Archived"];
 
 // export default function UserStoryDetail() {
 //   const { id } = useParams();
+
 //   const [story, setStory] = useState(null);
 //   const [loading, setLoading] = useState(true);
 
+//   // Editable fields
 //   const [subject, setSubject] = useState("");
 //   const [description, setDescription] = useState("");
-//   const [status, setStatus] = useState("");
+//   const [status, setStatus] = useState("New");
+
+//   const [saving, setSaving] = useState(false);
+//   const [dirty, setDirty] = useState(false);
+//   const [tasks, setTasks] = useState([]);
+//   const [showTaskModal, setShowTaskModal] = useState(false);
+
+
+//   const navigate = useNavigate();
+
 
 //   useEffect(() => {
 //     loadStory();
@@ -249,14 +448,14 @@
 
 //   const loadStory = async () => {
 //     try {
-//       const res = await authFetch(`/userstories/${id}/`);
-//       if (!res.ok) throw new Error("Failed to load story");
-
-//       const data = await res.json();
+//       const data = await getStory(id);
 //       setStory(data);
 //       setSubject(data.subject || "");
 //       setDescription(data.description || "");
-//       setStatus(data.status || "New");
+//       setStatus(data.status);
+//       const taskData = await getTasksByStory(id);
+//       setTasks(taskData);
+
 //     } catch (err) {
 //       console.error(err);
 //     } finally {
@@ -264,40 +463,50 @@
 //     }
 //   };
 
-//   /* ================= PATCH HELPERS ================= */
+//   /* ================= DELETE ================= */
 
-//   const patchStory = async (payload) => {
+//   const deleteStorydetail = async () => {
+//         const confirmed = window.confirm(
+//           "Are you sure you want to delete this user story?"
+//         );
+
+//         if (!confirmed) return;
+
+//         try {
+//           await deleteStory(id);
+
+          
+
+//           // Redirect to backlog
+//           navigate(-1); // go back to backlog
+//         } catch (err) {
+//           console.error(err);
+//           alert("Failed to delete user story");
+//         }
+//       };
+
+
+//   /* ================= SAVE ================= */
+
+//   const saveChanges = async () => {
 //     try {
-//       await authFetch(`/userstories/${id}/`, {
-//         method: "PATCH",
-//         body: JSON.stringify(payload),
+//       setSaving(true);
+
+//       const updated = await updateStory(id, {
+//         subject,
+//         description,
+//         status,
 //       });
+
+//       setStory(updated);
+//       setDirty(false);
 //     } catch (err) {
 //       console.error(err);
+//     } finally {
+//       setSaving(false);
 //     }
 //   };
 
-//   const onSubjectBlur = () => {
-//     if (subject !== story.subject) {
-//       patchStory({ subject });
-//       setStory((s) => ({ ...s, subject }));
-//     }
-//   };
-
-//   const onDescriptionBlur = () => {
-//     if (description !== story.description) {
-//       patchStory({ description });
-//       setStory((s) => ({ ...s, description }));
-//     }
-//   };
-
-//   const onStatusChange = (newStatus) => {
-//     setStatus(newStatus);
-//     patchStory({ status: newStatus });
-//     setStory((s) => ({ ...s, status: newStatus }));
-//   };
-
-//   /* ================= RENDER ================= */
 
 //   if (loading) return <div className="us-detail">Loading…</div>;
 //   if (!story) return <div className="us-detail">Not found</div>;
@@ -307,12 +516,14 @@
 //       {/* HEADER */}
 //       <div className="us-header">
 //         <h1>
-//           #{story.ref}{" "}
+//           #{story.ref}
 //           <input
 //             className="us-subject-input"
 //             value={subject}
-//             onChange={(e) => setSubject(e.target.value)}
-//             onBlur={onSubjectBlur}
+//             onChange={(e) => {
+//               setSubject(e.target.value);
+//               setDirty(true);
+//             }}
 //           />
 //         </h1>
 
@@ -321,7 +532,10 @@
 //           <select
 //             className="pill"
 //             value={status}
-//             onChange={(e) => onStatusChange(e.target.value)}
+//             onChange={(e) => {
+//               setStatus(e.target.value);
+//               setDirty(true);
+//             }}
 //           >
 //             {STATUS_OPTIONS.map((s) => (
 //               <option key={s}>{s}</option>
@@ -337,6 +551,19 @@
 //         <span>{new Date(story.created_at).toLocaleString()}</span>
 //       </div>
 
+//       {/* SAVE BAR */}
+//       {dirty && (
+//         <div className="us-save-bar">
+//           <button
+//             className="save-btn"
+//             disabled={saving}
+//             onClick={saveChanges}
+//           >
+//             {saving ? "Saving…" : "Save changes"}
+//           </button>
+//         </div>
+//       )}
+
 //       <div className="us-layout">
 //         {/* LEFT */}
 //         <div className="us-left">
@@ -345,9 +572,11 @@
 //           <textarea
 //             className="us-desc-input"
 //             value={description}
-//             onChange={(e) => setDescription(e.target.value)}
-//             onBlur={onDescriptionBlur}
 //             placeholder="Add a description"
+//             onChange={(e) => {
+//               setDescription(e.target.value);
+//               setDirty(true);
+//             }}
 //           />
 
 //           {/* ATTACHMENTS */}
@@ -366,7 +595,7 @@
 //           </div>
 //         </div>
 
-//         {/* RIGHT */}
+//         {/* RIGHT (unchanged UI) */}
 //         <div className="us-right">
 //           <div className="points">
 //             <h4>POINTS</h4>
@@ -374,9 +603,7 @@
 //             <div>Design <span>?</span></div>
 //             <div>Front <span>?</span></div>
 //             <div>Back <span>?</span></div>
-//             <div className="total">
-//               total points <span>?</span>
-//             </div>
+//             <div className="total">total points <span>?</span></div>
 //           </div>
 
 //           <div className="assigned">
@@ -396,7 +623,13 @@
 //             <button>👥</button>
 //             <button>📁</button>
 //             <button>🔒</button>
-//             <button>🗑</button>
+//             <button
+//               className="danger"
+//               title="Delete user story"
+//               onClick={deleteStorydetail}
+//             >
+//               🗑
+//             </button>
 //           </div>
 //         </div>
 //       </div>
@@ -405,19 +638,30 @@
 // }
 
 import { useEffect, useState } from "react";
-import { useNavigate,useParams } from "react-router-dom";
-import { authFetch } from "../../services/api";
+import { useNavigate, useParams } from "react-router-dom";
+import TaskCreateModal from "../../components/TaskCreateModal/TaskCreateModal";
+
+import {
+  getStory,
+  updateStory,
+  deleteStory
+} from "../../services/userStoryService";
+
+import {
+  getTasksByStory
+} from "../../services/taskService";
+
 import "./UserStoryDetail.css";
 
 const STATUS_OPTIONS = ["New", "Ready", "In Progress", "Done", "Archived"];
 
 export default function UserStoryDetail() {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [story, setStory] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Editable fields
   const [subject, setSubject] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("New");
@@ -425,8 +669,8 @@ export default function UserStoryDetail() {
   const [saving, setSaving] = useState(false);
   const [dirty, setDirty] = useState(false);
 
-  const navigate = useNavigate();
-
+  const [tasks, setTasks] = useState([]);
+  const [showTaskModal, setShowTaskModal] = useState(false);
 
   useEffect(() => {
     loadStory();
@@ -434,44 +678,42 @@ export default function UserStoryDetail() {
 
   const loadStory = async () => {
     try {
-      const res = await authFetch(`/userstories/${id}/`);
-      if (!res.ok) throw new Error("Failed to load story");
+      setLoading(true);
 
-      const data = await res.json();
+      const data = await getStory(id);
       setStory(data);
-      setSubject(data.subject || "");
+
+      setSubject(data.title || "");
       setDescription(data.description || "");
-      setStatus(data.status || "New");
+      setStatus(data.status || 1);
+
+      const taskData = await getTasksByStory(id);
+      setTasks(taskData);
+
     } catch (err) {
       console.error(err);
     } finally {
       setLoading(false);
     }
   };
+
   /* ================= DELETE ================= */
 
-  const deleteStory = async () => {
-        const confirmed = window.confirm(
-          "Are you sure you want to delete this user story?"
-        );
+  const deleteStoryDetail = async () => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this user story?"
+    );
 
-        if (!confirmed) return;
+    if (!confirmed) return;
 
-        try {
-          const res = await authFetch(`/userstories/${id}/`, {
-            method: "DELETE",
-          });
-
-          if (!res.ok) throw new Error("Delete failed");
-
-          // Redirect to backlog
-          navigate(-1); // go back to backlog
-        } catch (err) {
-          console.error(err);
-          alert("Failed to delete user story");
-        }
-      };
-
+    try {
+      await deleteStory(id);
+      navigate(-1);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to delete user story");
+    }
+  };
 
   /* ================= SAVE ================= */
 
@@ -479,20 +721,15 @@ export default function UserStoryDetail() {
     try {
       setSaving(true);
 
-      const payload = {
-        subject,
+      const { stringToStatusNumber, createSlug } = await import("../../utils/statusMapping");
+      
+      const updated = await updateStory(id, {
+        title: subject,
+        slug: createSlug(subject),
         description,
-        status,
-      };
-
-      const res = await authFetch(`/userstories/${id}/`, {
-        method: "PATCH",
-        body: JSON.stringify(payload),
+        status: typeof status === 'string' ? stringToStatusNumber(status) : status,
       });
 
-      if (!res.ok) throw new Error("Save failed");
-
-      const updated = await res.json();
       setStory(updated);
       setDirty(false);
     } catch (err) {
@@ -506,127 +743,172 @@ export default function UserStoryDetail() {
   if (!story) return <div className="us-detail">Not found</div>;
 
   return (
-    <div className="us-detail">
-      {/* HEADER */}
-      <div className="us-header">
-        <h1>
-          #{story.ref}
-          <input
-            className="us-subject-input"
-            value={subject}
-            onChange={(e) => {
-              setSubject(e.target.value);
-              setDirty(true);
-            }}
-          />
-        </h1>
+    <>
+      <div className="us-detail">
+        {/* HEADER */}
+        <div className="us-header">
+          <h1>
+            #{story.id}
+            <input
+              className="us-subject-input"
+              value={subject}
+              onChange={(e) => {
+                setSubject(e.target.value);
+                setDirty(true);
+              }}
+            />
+          </h1>
 
-        <div className="us-status">
-          OPEN{" "}
-          <select
-            className="pill"
-            value={status}
-            onChange={(e) => {
-              setStatus(e.target.value);
-              setDirty(true);
-            }}
-          >
-            {STATUS_OPTIONS.map((s) => (
-              <option key={s}>{s}</option>
-            ))}
-          </select>
-        </div>
-      </div>
-
-      <span className="us-type">USER STORY</span>
-
-      <div className="us-created">
-        Created at{" "}
-        <span>{new Date(story.created_at).toLocaleString()}</span>
-      </div>
-
-      {/* SAVE BAR */}
-      {dirty && (
-        <div className="us-save-bar">
-          <button
-            className="save-btn"
-            disabled={saving}
-            onClick={saveChanges}
-          >
-            {saving ? "Saving…" : "Save changes"}
-          </button>
-        </div>
-      )}
-
-      <div className="us-layout">
-        {/* LEFT */}
-        <div className="us-left">
-          <div className="tags">Add tag +</div>
-
-          <textarea
-            className="us-desc-input"
-            value={description}
-            placeholder="Add a description"
-            onChange={(e) => {
-              setDescription(e.target.value);
-              setDirty(true);
-            }}
-          />
-
-          {/* ATTACHMENTS */}
-          <div className="attachments">
-            <div className="attachments-header">
-              <span>0 Attachments</span>
-              <button>+</button>
-            </div>
-            <div className="dropzone">Drop attachments here!</div>
-          </div>
-
-          {/* COMMENTS */}
-          <div className="comments">
-            <h4>0 Comments</h4>
-            <textarea placeholder="Type a new comment here" />
-          </div>
-        </div>
-
-        {/* RIGHT (unchanged UI) */}
-        <div className="us-right">
-          <div className="points">
-            <h4>POINTS</h4>
-            <div>UX <span>?</span></div>
-            <div>Design <span>?</span></div>
-            <div>Front <span>?</span></div>
-            <div>Back <span>?</span></div>
-            <div className="total">total points <span>?</span></div>
-          </div>
-
-          <div className="assigned">
-            <h4>ASSIGNED</h4>
-            <div className="assignee">Unassigned</div>
-            <button>+ Add assigned</button>
-          </div>
-
-          <div className="watchers">
-            <h4>WATCHERS</h4>
-            <button>+ Add watchers</button>
-            <button className="link">Watch</button>
-          </div>
-
-          <div className="us-icons">
-            <button>⏱</button>
-            <button>👥</button>
-            <button>📁</button>
-            <button>🔒</button>
-            <button
-              className="danger"
-              title="Delete user story"
-              onClick={deleteStory}
+          <div className="us-status">
+            OPEN{" "}
+            <select
+              className="pill"
+              value={status}
+              onChange={(e) => {
+                setStatus(parseInt(e.target.value));
+                setDirty(true);
+              }}
             >
-              🗑
+              <option value={1}>New</option>
+              <option value={2}>In Progress</option>
+              <option value={3}>Ready For Test</option>
+              <option value={4}>Done</option>
+            </select>
+          </div>
+        </div>
+
+        <span className="us-type">USER STORY</span>
+
+        <div className="us-created">
+          Created at{" "}
+          <span>{new Date(story.created_at).toLocaleString()}</span>
+        </div>
+
+        {/* SAVE BAR */}
+        {dirty && (
+          <div className="us-save-bar">
+            <button
+              className="save-btn"
+              disabled={saving}
+              onClick={saveChanges}
+            >
+              {saving ? "Saving…" : "Save changes"}
             </button>
           </div>
+        )}
+
+        <div className="us-layout">
+          {/* LEFT */}
+          <div className="us-left">
+
+            <div className="tags">Add tag +</div>
+
+            <textarea
+              className="us-desc-input"
+              value={description}
+              placeholder="Add a description"
+              onChange={(e) => {
+                setDescription(e.target.value);
+                setDirty(true);
+              }}
+            />
+
+            {/* ✅ TASK SECTION */}
+            <div className="us-tasks">
+              <h4>Tasks</h4>
+
+              {tasks.length === 0 ? (
+                <div className="us-task-empty">
+                  No tasks yet.
+                </div>
+              ) : (
+                tasks.map((task) => (
+                  <div key={task.id} className="us-task-row">
+                    #{task.id} {task.title}
+                  </div>
+                ))
+              )}
+
+              <button
+                className="link"
+                onClick={() => setShowTaskModal(true)}
+              >
+                + Add Task
+              </button>
+            </div>
+
+            {/* ATTACHMENTS */}
+            <div className="attachments">
+              <div className="attachments-header">
+                <span>0 Attachments</span>
+                <button>+</button>
+              </div>
+              <div className="dropzone">
+                Drop attachments here!
+              </div>
+            </div>
+
+            {/* COMMENTS */}
+            <div className="comments">
+              <h4>0 Comments</h4>
+              <textarea placeholder="Type a new comment here" />
+            </div>
+
+          </div>
+
+          {/* RIGHT */}
+          <div className="us-right">
+
+            <div className="points">
+              <h4>POINTS</h4>
+              <div>UX <span>?</span></div>
+              <div>Design <span>?</span></div>
+              <div>Front <span>?</span></div>
+              <div>Back <span>?</span></div>
+              <div className="total">total points <span>?</span></div>
+            </div>
+
+            <div className="assigned">
+              <h4>ASSIGNED</h4>
+              <div className="assignee">Unassigned</div>
+              <button>+ Add assigned</button>
+            </div>
+
+            <div className="watchers">
+              <h4>WATCHERS</h4>
+              <button>+ Add watchers</button>
+              <button className="link">Watch</button>
+            </div>
+
+            <div className="us-icons">
+              <button>⏱</button>
+              <button>👥</button>
+              <button>📁</button>
+              <button>🔒</button>
+              <button
+                className="danger"
+                title="Delete user story"
+                onClick={deleteStoryDetail}
+              >
+                🗑
+              </button>
+            </div>
+
+          </div>
         </div>
       </div>
-    </div>
+
+      {/* ✅ TASK MODAL */}
+      {showTaskModal && (
+        <TaskCreateModal
+          projectSlug={story.project_slug}
+          userstoryId={story.id}
+          onClose={() => setShowTaskModal(false)}
+          onCreated={(task) =>
+            setTasks((prev) => [...prev, task])
+          }
+        />
+      )}
+    </>
   );
 }

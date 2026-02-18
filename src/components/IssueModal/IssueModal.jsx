@@ -1,33 +1,54 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./IssueModal.css";
 
-export default function IssueModal({ onClose, onCreate }) {
+export default function IssueModal({ onClose, onCreate, tasks = [] }) {
   const [subject, setSubject] = useState("");
   const [description, setDescription] = useState("");
   const [assignedToMe, setAssignedToMe] = useState(false);
 
-  const [type, setType] = useState("bug");
+  const [type, setType] = useState("question");
   const [severity, setSeverity] = useState("normal");
   const [priority, setPriority] = useState("normal");
+  const [taskId, setTaskId] = useState("");
 
   const [openMenu, setOpenMenu] = useState(null); // type | severity | priority
 
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
-const handleCreate = async () => {
-  if (!subject.trim() || submitting) return;
+  useEffect(() => {
+    if (!taskId && tasks.length > 0) {
+      setTaskId(String(tasks[0].id));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tasks]);
 
-  setSubmitting(true);
-  await onCreate({
-    subject,
-    description,
-    type,
-    severity,
-    priority,
-    assignedToMe,
-  });
-  setSubmitting(false);
-};
+  const handleCreate = async () => {
+    if (!subject.trim() || submitting) return;
+    if (!taskId) {
+      setError("Please select a task");
+      return;
+    }
+
+    setError("");
+    setSubmitting(true);
+    try {
+      await onCreate({
+        taskId,
+        title: subject,
+        description,
+        type,
+        // UI-only (kept)
+        severity,
+        priority,
+        assignedToMe,
+      });
+    } catch (err) {
+      setError(err?.message || "Failed to create issue");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   const closeMenu = () => setOpenMenu(null);
 
@@ -48,6 +69,19 @@ const handleCreate = async () => {
               onChange={(e) => setSubject(e.target.value)}
             />
 
+            <select
+              className="modal-input"
+              value={taskId}
+              onChange={(e) => setTaskId(e.target.value)}
+            >
+              <option value="">Select task</option>
+              {tasks.map((t) => (
+                <option key={t.id} value={t.id}>
+                  #{t.id} {t.title}
+                </option>
+              ))}
+            </select>
+
             <div className="tags">Add tag +</div>
 
             <textarea
@@ -67,6 +101,12 @@ const handleCreate = async () => {
                 Drop attachments here!
               </div>
             </div>
+
+            {error && (
+              <div style={{ color: "#c9302c", marginTop: 8, fontSize: 13 }}>
+                {error}
+              </div>
+            )}
 
             <button className="create-btn" disabled={submitting} onClick={handleCreate}>
               {submitting ? "CREATING..." : "CREATE"}
@@ -105,7 +145,7 @@ const handleCreate = async () => {
 
                 {openMenu === "type" && (
                   <div className="meta-menu">
-                    {["bug", "question", "enhancement"].map((v) => (
+                    {["question", "enhancement"].map((v) => (
                       <div
                         key={v}
                         className="meta-option"

@@ -171,18 +171,38 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 // import { fetchProjects } from "../../services/projects";
 import { getProjects } from "../../services/projectService";
+import { getMyTasks } from "../../services/taskService";
 
 import "./Dashboard.css";
+
+const STATUS_LABELS = {
+  1: "NEW",
+  2: "IN PROGRESS",
+  3: "READY FOR TEST",
+  4: "DONE",
+};
 
 export default function Dashboard() {
   const navigate = useNavigate();
   const [projects, setProjects] = useState([]);
+  const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [tasksLoading, setTasksLoading] = useState(true);
 
   useEffect(() => {
     getProjects()
       .then(setProjects)
       .finally(() => setLoading(false));
+  }, []);
+
+  useEffect(() => {
+    getMyTasks()
+      .then(setTasks)
+      .catch((err) => {
+        console.error("Failed to load tasks", err);
+        setTasks([]);
+      })
+      .finally(() => setTasksLoading(false));
   }, []);
 
   return (
@@ -252,15 +272,43 @@ export default function Dashboard() {
               ))}
           </section>
 
-          {/* WATCHING (future) */}
+          {/* WATCHING */}
           <section className="dashboard__section dashboard__section--watching">
             <p className="dashboard__hint">
               Follow user stories, tasks, issues in your projects and
               be notified about their changes :)
             </p>
 
-            <SkeletonItem />
-            <SkeletonItem />
+            {tasksLoading && (
+              <>
+                <SkeletonItem />
+                <SkeletonItem />
+              </>
+            )}
+
+            {!tasksLoading && tasks.length === 0 && (
+              <p className="dashboard__empty">
+                You don't have any tasks assigned to you.
+              </p>
+            )}
+
+            {!tasksLoading &&
+              tasks.map((task) => (
+                <div key={task.id} className="task-row">
+                  <div className="task-row__info">
+                    <div className="task-row__header">
+                      <span className="task-row__ref">#{task.id}</span>
+                      <span className={`task-row__status task-row__status--${task.status}`}>
+                        {STATUS_LABELS[task.status] || `Status ${task.status}`}
+                      </span>
+                    </div>
+                    <div className="task-row__title">{task.title}</div>
+                    {task.description && (
+                      <div className="task-row__desc">{task.description}</div>
+                    )}
+                  </div>
+                </div>
+              ))}
           </section>
         </div>
       </main>

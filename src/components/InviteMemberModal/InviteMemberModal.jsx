@@ -1,6 +1,7 @@
 // src/components/InviteMemberModal/InviteMemberModal.jsx
-import { useState } from "react";
-import { authFetch } from "../../services/authFetch";
+import { useState, useEffect } from "react";
+import { getUsers } from "../../services/userService";
+import { addMember } from "../../services/membershipService";
 
 import "./InviteMemberModal.css";
 
@@ -9,93 +10,114 @@ export default function InviteMemberModal({
   onClose,
   onSuccess,
 }) {
-  const [step, setStep] = useState(1);
-  const [email, setEmail] = useState("");
-  const [role, setRole] = useState("member");
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [invitingUsers, setInvitingUsers] = useState(new Set());
   const [error, setError] = useState("");
 
-  const handleAddEmail = () => {
-    if (!email) return;
-    setStep(2);
-  };
+  useEffect(() => {
+    const loadUsers = async () => {
+      try {
+        const data = await getUsers();
+        setUsers(data);
+      } catch (err) {
+        console.error("Failed to load users", err);
+        setError("Failed to load users");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const handleInvite = async () => {
+    loadUsers();
+  }, []);
+
+  const handleInvite = async (user) => {
+    if (!projectId) {
+      setError("Project ID is required");
+      return;
+    }
+
+    setInvitingUsers((prev) => new Set(prev).add(user.id));
     setError("");
 
     try {
-      const data = await authFetch("/memberships/", {
-        method: "POST",
-        body: JSON.stringify({
-          project: projectId,
-          user_email: email,
-        }),
+      const response = await addMember({
+        project: projectId,
+        user_email: user.email,
       });
 
-      onSuccess(data);
+      // Successfully added member
+      if (onSuccess) {
+        onSuccess(response);
+      }
       onClose();
     } catch (err) {
       setError(err.message || "Failed to add member");
+      setInvitingUsers((prev) => {
+        const next = new Set(prev);
+        next.delete(user.id);
+        return next;
+      });
+    }
+  };
+
+  const handleOverlayClick = (e) => {
+    if (e.target === e.currentTarget) {
+      onClose();
     }
   };
 
   return (
-    <div className="invite-overlay">
+    <div className="invite-overlay" onClick={handleOverlayClick}>
       <div className="invite-modal">
-        <button className="invite-close" onClick={onClose}>
+        <button className="invite-close" onClick={onClose} aria-label="Close">
           ✕
         </button>
 
         <h2>New Member</h2>
 
-        {step === 1 && (
-          <div className="invite-step">
-            <div className="email-input">
-              <input
-                type="email"
-                placeholder="User email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <button className="add-btn" onClick={handleAddEmail}>
-                +
-              </button>
-            </div>
-          </div>
+        {error && (
+          <div className="invite-error">{error}</div>
         )}
 
-        {step === 2 && (
-          <>
-            <div className="invite-row">
-              <span>{email}</span>
-              <button className="remove" onClick={() => setStep(1)}>
-                Remove
-              </button>
-
-              <select
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-              >
-                <option value="member">Member</option>
-                <option value="owner">Owner</option>
-              </select>
-            </div>
-
-            <textarea
-              className="invite-message"
-              placeholder="(Optional) Add a personalized message"
-              disabled
-            />
-
-            {error && <div className="invite-error">{error}</div>}
-
-            <button className="invite-btn" onClick={handleInvite}>
-              INVITE
-            </button>
-
-            <p className="invite-hint">
-              Only existing users can be added to this project.
-            </p>
-          </>
+        {loading ? (
+          <div className="invite-loading">
+            <div className="invite-spinner"></div>
+            <span>Loading users…</span>
+          </div>
+        ) : (
+          <div className="user-list">
+            {users.length === 0 ? (
+              <div className="invite-empty">No users available.</div>
+            ) : (
+              users.map((user) => (
+                <div key={user.id} className="user-item">
+                  <div className="user-item__avatar">
+                    {user.username.charAt(0).toUpperCase()}
+                  </div>
+                  <div className="user-item__info">
+                    <div className="user-item__name">{user.username}</div>
+                    <div className="user-item__email">{user.email}</div>
+                    {user.role && (
+                      <div className="user-item__role">{user.role}</div>
+                    )}
+                  </div>
+                  <button
+                    className="user-item__invite-btn"
+                    onClick={() => handleInvite(user)}
+                    disabled={invitingUsers.has(user.id)}
+                    title="Add to project"
+                  >
+                    {invitingUsers.has(user.id) ? (
+                      <span className="invite-btn-spinner"></span>
+                    ) : (
+                      "+"
+                    )}
+                  </button>
+                </div>
+              ))
+            )}
+          </div>
         )}
       </div>
     </div>

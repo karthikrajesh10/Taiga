@@ -235,6 +235,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import TaskCreateModal from "../../components/TaskCreateModal/TaskCreateModal";
+import { authFetch } from "../../services/authFetch";
 
 import {
   getStory,
@@ -243,15 +244,21 @@ import {
 } from "../../services/userStoryService";
 
 import {
-  getTasksByStory
+  getTasksByStory,
+  updateTask,
+  deleteTask
 } from "../../services/taskService";
+
+import {
+  getProjectMembers
+} from "../../services/membershipService";
 
 import "./UserStoryDetail.css";
 
 const STATUS_OPTIONS = ["New", "Ready", "In Progress", "Done", "Archived"];
 
 export default function UserStoryDetail() {
-  const { id } = useParams();
+  const { id, slug } = useParams();
   const navigate = useNavigate();
 
   const [story, setStory] = useState(null);
@@ -266,10 +273,45 @@ export default function UserStoryDetail() {
 
   const [tasks, setTasks] = useState([]);
   const [showTaskModal, setShowTaskModal] = useState(false);
+  
+  const [projectId, setProjectId] = useState(null);
+  const [assigningTaskId, setAssigningTaskId] = useState(null);
+  const [members, setMembers] = useState([]);
+  const [assigningUsers, setAssigningUsers] = useState(new Set());
 
   useEffect(() => {
     loadStory();
   }, [id]);
+
+  // Load project ID from slug
+  useEffect(() => {
+    const loadProject = async () => {
+      if (!slug) return;
+      try {
+        const data = await authFetch(`/projects/?slug=${slug}`);
+        if (Array.isArray(data) && data.length > 0) {
+          setProjectId(data[0].id);
+        }
+      } catch (err) {
+        console.error("Failed to load project", err);
+      }
+    };
+    loadProject();
+  }, [slug]);
+
+  // Load members when project ID is available
+  useEffect(() => {
+    const loadMembers = async () => {
+      if (!projectId) return;
+      try {
+        const data = await getProjectMembers(projectId);
+        setMembers(data);
+      } catch (err) {
+        console.error("Failed to load members", err);
+      }
+    };
+    loadMembers();
+  }, [projectId]);
 
   const loadStory = async () => {
     try {
@@ -331,6 +373,51 @@ export default function UserStoryDetail() {
       console.error(err);
     } finally {
       setSaving(false);
+    }
+  };
+
+  /* ================= ASSIGN TASK ================= */
+
+  const handleAssignTask = async (taskId, userId) => {
+    setAssigningUsers((prev) => new Set(prev).add(userId));
+    
+    try {
+      await updateTask(taskId, { assignee: userId });
+      
+      // Reload tasks to get updated assignee info
+      const taskData = await getTasksByStory(id);
+      setTasks(taskData);
+      
+      setAssigningTaskId(null);
+    } catch (err) {
+      console.error("Failed to assign task", err);
+      alert("Failed to assign task. Please try again.");
+    } finally {
+      setAssigningUsers((prev) => {
+        const next = new Set(prev);
+        next.delete(userId);
+        return next;
+      });
+    }
+  };
+
+  /* ================= DELETE TASK ================= */
+
+  const handleDeleteTask = async (taskId) => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this task?"
+    );
+
+    if (!confirmed) return;
+
+    try {
+      await deleteTask(taskId);
+      
+      // Remove task from the list
+      setTasks((prev) => prev.filter((task) => task.id !== taskId));
+    } catch (err) {
+      console.error("Failed to delete task", err);
+      alert("Failed to delete task. Please try again.");
     }
   };
 
@@ -419,7 +506,31 @@ export default function UserStoryDetail() {
               ) : (
                 tasks.map((task) => (
                   <div key={task.id} className="us-task-row">
-                    #{task.id} {task.title}
+                    <div className="us-task-info">
+                      <span className="us-task-id">#{task.id}</span>
+                      <span className="us-task-title">{task.title}</span>
+                      {task.assignee_username && (
+                        <span className="us-task-assignee">
+                          Assigned to: {task.assignee_username}
+                        </span>
+                      )}
+                    </div>
+                    <div className="us-task-actions">
+                      <button
+                        className="us-assign-btn"
+                        onClick={() => setAssigningTaskId(task.id)}
+                        title="Assign to"
+                      >
+                        Assign to
+                      </button>
+                      <button
+                        className="us-delete-btn"
+                        onClick={() => handleDeleteTask(task.id)}
+                        title="Delete task"
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </div>
                 ))
               )}
@@ -503,6 +614,64 @@ export default function UserStoryDetail() {
             setTasks((prev) => [...prev, task])
           }
         />
+      )}
+
+      {/* ✅ ASSIGN MEMBER MODAL */}
+      {assigningTaskId && (
+        <div 
+          className="assign-overlay" 
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setAssigningTaskId(null);
+            }
+          }}
+        >
+          <div className="assign-modal">
+            <button 
+              className="assign-close" 
+              onClick={() => setAssigningTaskId(null)}
+              aria-label="Close"
+            >
+              ✕
+            </button>
+
+            <h2>Assign Task #{assigningTaskId}</h2>
+            <p className="assign-subtitle">Select a member to assign this task to:</p>
+
+            {members.length === 0 ? (
+              <div className="assign-empty">No members available.</div>
+            ) : (
+              <div className="member-list">
+                {members.map((membership) => (
+                  <div key={membership.id} className="member-item">
+                    <div className="member-item__avatar">
+                      {membership.user.username.charAt(0).toUpperCase()}
+                    </div>
+                    <div className="member-item__info">
+                      <div className="member-item__name">{membership.user.username}</div>
+                      <div className="member-item__email">{membership.user.email}</div>
+                      {membership.user.role && (
+                        <div className="member-item__role">{membership.user.role}</div>
+                      )}
+                    </div>
+                    <button
+                      className="member-item__assign-btn"
+                      onClick={() => handleAssignTask(assigningTaskId, membership.user.id)}
+                      disabled={assigningUsers.has(membership.user.id)}
+                      title="Assign to this member"
+                    >
+                      {assigningUsers.has(membership.user.id) ? (
+                        <span className="assign-btn-spinner">⏳</span>
+                      ) : (
+                        "+"
+                      )}
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
       )}
     </>
   );

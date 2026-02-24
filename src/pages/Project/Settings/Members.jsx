@@ -422,28 +422,32 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { authFetch } from "../../../services/authFetch";
-
+import { getProjectMembers, removeMember } from "../../../services/membershipService";
 
 import InviteMemberModal from "../../../components/InviteMemberModal/InviteMemberModal";
 import "./Members.css";
 
 export default function Members() {
-  const { slug } = useParams(); // ✅ FIXED
+  const { slug } = useParams();
 
   const [projectId, setProjectId] = useState(null);
   const [members, setMembers] = useState([]);
   const [showInvite, setShowInvite] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [deletingMembers, setDeletingMembers] = useState(new Set());
 
   // 1️⃣ Load project → get ID
   useEffect(() => {
     async function loadProject() {
       if (!slug) return;
 
-      const res = await authFetch(`/projects/?slug=${slug}`);
-      const data = await res.json();
-
-      if (data.length > 0) {
-        setProjectId(data[0].id);
+      try {
+        const data = await authFetch(`/projects/?slug=${slug}`);
+        if (Array.isArray(data) && data.length > 0) {
+          setProjectId(data[0].id);
+        }
+      } catch (err) {
+        console.error("Failed to load project", err);
       }
     }
 
@@ -455,23 +459,62 @@ export default function Members() {
     if (!projectId) return;
 
     async function loadMembers() {
-      const res = await authFetch(`/memberships/?project=${projectId}`);
-      const data = await res.json();
+      setLoading(true);
+      try {
+        const data = await getProjectMembers(projectId);
+        setMembers(
+          data.map((m) => ({
+            id: m.id,
+            name: m.user.username,
+            email: m.user.email,
+            role: m.user.role || "Member",
+            admin: false,
+            status: "Active",
+          }))
+        );
+      } catch (err) {
+        console.error("Failed to load members", err);
+        setMembers([]);
+      } finally {
+        setLoading(false);
+      }
+    }
 
+    loadMembers();
+  }, [projectId]);
+
+  const handleDeleteMember = async (membershipId) => {
+    if (!window.confirm("Are you sure you want to remove this member from the project?")) {
+      return;
+    }
+
+    setDeletingMembers((prev) => new Set(prev).add(membershipId));
+
+    try {
+      await removeMember(membershipId);
+      // Reload members after successful deletion
+      const data = await getProjectMembers(projectId);
       setMembers(
         data.map((m) => ({
           id: m.id,
           name: m.user.username,
           email: m.user.email,
-          role: m.role,
-          admin: m.role === "owner",
+          role: m.user.role || "Member",
+          admin: false,
           status: "Active",
         }))
       );
+    } catch (err) {
+      console.error("Failed to delete member", err);
+      alert("Failed to remove member. Please try again.");
+    } finally {
+      setDeletingMembers((prev) => {
+        const next = new Set(prev);
+        next.delete(membershipId);
+        return next;
+      });
     }
-
-    loadMembers();
-  }, [projectId]);
+  };
 
   return (
     <div className="members">
@@ -488,28 +531,48 @@ export default function Members() {
           <span>Admin</span>
           <span>Role</span>
           <span>Status</span>
+          <span>Actions</span>
         </div>
 
-        {members.map((m) => (
-          <div className="members__row" key={m.id}>
-            <div className="member">
-              <div className="avatar">{m.name[0].toUpperCase()}</div>
-              <div>
-                <strong>{m.name}</strong>
-                <div className="email">{m.email}</div>
+        {loading && (
+          <div className="members__empty">Loading members…</div>
+        )}
+
+        {!loading && members.length === 0 && (
+          <div className="members__empty">No members yet.</div>
+        )}
+
+        {!loading &&
+          members.map((m) => (
+            <div className="members__row" key={m.id}>
+              <div className="member">
+                <div className="avatar">{m.name[0].toUpperCase()}</div>
+                <div>
+                  <strong>{m.name}</strong>
+                  <div className="email">{m.email}</div>
+                </div>
               </div>
+
+              <input type="checkbox" checked={m.admin} readOnly />
+
+              <span className="member-role">{m.role}</span>
+
+              <div className="status active">Active</div>
+
+              <button
+                className="member-delete-btn"
+                onClick={() => handleDeleteMember(m.id)}
+                disabled={deletingMembers.has(m.id)}
+                title="Remove member from project"
+              >
+                {deletingMembers.has(m.id) ? (
+                  <span className="delete-spinner"></span>
+                ) : (
+                  "Delete"
+                )}
+              </button>
             </div>
-
-            <input type="checkbox" checked={m.admin} readOnly />
-
-            <select value={m.role} disabled>
-              <option value="owner">Owner</option>
-              <option value="member">Member</option>
-            </select>
-
-            <div className="status active">Active</div>
-          </div>
-        ))}
+          ))}
       </div>
 
       {showInvite && (
@@ -518,20 +581,21 @@ export default function Members() {
           onClose={() => setShowInvite(false)}
           onSuccess={() => {
             setShowInvite(false);
-            authFetch(`/memberships/?project=${projectId}`)
-              .then((r) => r.json())
+            // Reload members
+            getProjectMembers(projectId)
               .then((data) =>
                 setMembers(
                   data.map((m) => ({
                     id: m.id,
                     name: m.user.username,
                     email: m.user.email,
-                    role: m.role,
-                    admin: m.role === "owner",
+                    role: m.user.role || "Member",
+                    admin: false,
                     status: "Active",
                   }))
                 )
-              );
+              )
+              .catch((err) => console.error("Failed to reload members", err));
           }}
         />
       )}

@@ -110,6 +110,11 @@ import { authFetch } from "./authFetch";
 export const getTasksByStory = async (storyId) =>
   await authFetch(`/tasks/?user_story=${storyId}`);
 
+/* ================= GET MY TASKS ================= */
+
+export const getMyTasks = async () =>
+  await authFetch(`/tasks/my/`);
+
 /* ================= CREATE TASK ================= */
 
 export const createTask = async (data) =>

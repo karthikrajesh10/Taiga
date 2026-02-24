@@ -117,3 +117,75 @@
   color: #888;
   margin-top: 16px;
 }
+
+/* Task list row */
+.task-row {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  background: #ffffff;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.task-row:hover {
+  background: #f7f9fb;
+}
+
+.task-row__info {
+  display: flex;
+  flex-direction: column;
+}
+
+.task-row__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.task-row__ref {
+  font-size: 12px;
+  font-weight: 700;
+  color: #00a0b0;
+}
+
+.task-row__status {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.task-row__status--1 {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.task-row__status--2 {
+  background: #fff3e0;
+  color: #f57c00;
+}
+
+.task-row__status--3 {
+  background: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.task-row__status--4 {
+  background: #e8f5e9;
+  color: #388e3c;
+}
+
+.task-row__title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2e3440;
+  margin-bottom: 4px;
+}
+
+.task-row__desc {
+  font-size: 12px;
+  color: #7a7f87;
+  margin-top: 4px;
+}

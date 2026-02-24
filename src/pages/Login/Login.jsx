@@ -126,6 +126,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { login as loginAPI } from "../../services/authService";
 import taigaLogo from "../../assets/icons/taiga_logo_captioned.svg";
+import ashokLogo from "../../assets/icons/Ashok_Leyland.svg"
 import "./Login.css";
 
 export default function Login() {
@@ -155,9 +156,9 @@ export default function Login() {
   return (
     <div className="login">
       <div className="login__container">
-        <img src={taigaLogo} alt="Taiga" className="login__logo" />
+        <img src={ashokLogo} alt="Taiga" className="login__logo" />
 
-        <div className="login__tagline">LOVE YOUR PROJECT</div>
+        <div className="login__tagline">PROJECT MANAGEMENT TOOL</div>
 
         <form className="login__form" onSubmit={handleLogin}>
           <input

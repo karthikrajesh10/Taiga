@@ -133,7 +133,10 @@ export const updateTask = async (taskId, data) =>
 
 /* ================= DELETE TASK ================= */
 
-export const deleteTask = async (taskId) =>
-  await authFetch(`/tasks/${taskId}/`, {
+export const deleteTask = async (taskId) => {
+  const response = await authFetch(`/tasks/${taskId}/`, {
     method: "DELETE",
   });
+  // Handle both 200 (with body) and 204 (no content) responses
+  return response;
+};

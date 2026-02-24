@@ -103,7 +103,10 @@ export const updateSprint = async (id, data) =>
 
 /* ================= DELETE SPRINT ================= */
 
-export const deleteSprint = async (id) =>
-  await authFetch(`/sprints/${id}/`, {
+export const deleteSprint = async (id) => {
+  const response = await authFetch(`/sprints/${id}/`, {
     method: "DELETE",
   });
+  // Handle both 200 (with body) and 204 (no content) responses
+  return true;
+};

@@ -384,7 +384,17 @@ export default function UserStoryDetail() {
     try {
       await updateTask(taskId, { assignee: userId });
       
-      // Reload tasks to get updated assignee info
+      // Update task immediately with assignee info
+      const assignedMember = members.find(m => m.user.id === userId);
+      setTasks((prev) => 
+        prev.map((task) => 
+          task.id === taskId 
+            ? { ...task, assignee: userId, assignee_username: assignedMember?.user.username }
+            : task
+        )
+      );
+      
+      // Reload tasks to get updated assignee info from server
       const taskData = await getTasksByStory(id);
       setTasks(taskData);
       
@@ -419,6 +429,27 @@ export default function UserStoryDetail() {
       console.error("Failed to delete task", err);
       alert("Failed to delete task. Please try again.");
     }
+  };
+
+  /* ================= GET ASSIGNEE NAME ================= */
+
+  const getAssigneeName = (task) => {
+    // If assignee_username is available, use it
+    if (task.assignee_username) {
+      return task.assignee_username;
+    }
+    
+    // If assignee (user ID) is available, find the username from members
+    if (task.assignee) {
+      const member = members.find(m => m.user.id === task.assignee);
+      if (member) {
+        return member.user.username;
+      }
+      // If member not found, return the user ID
+      return `User ID: ${task.assignee}`;
+    }
+    
+    return null;
   };
 
   if (loading) return <div className="us-detail">Loading…</div>;
@@ -504,14 +535,16 @@ export default function UserStoryDetail() {
                   No tasks yet.
                 </div>
               ) : (
-                tasks.map((task) => (
+                tasks.map((task) => {
+                  const assigneeName = getAssigneeName(task);
+                  return (
                   <div key={task.id} className="us-task-row">
                     <div className="us-task-info">
                       <span className="us-task-id">#{task.id}</span>
                       <span className="us-task-title">{task.title}</span>
-                      {task.assignee_username && (
+                      {assigneeName && (
                         <span className="us-task-assignee">
-                          Assigned to: {task.assignee_username}
+                          Assigned to: {assigneeName}
                         </span>
                       )}
                     </div>
@@ -532,7 +565,8 @@ export default function UserStoryDetail() {
                       </button>
                     </div>
                   </div>
-                ))
+                  );
+                })
               )}
 
               <button

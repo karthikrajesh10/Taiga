@@ -34,7 +34,10 @@ export const updateIssue = async (id, data) =>
 
 /* ================= DELETE ISSUE ================= */
 
-export const deleteIssue = async (id) =>
-  await authFetch(`/issues/${id}/`, {
+export const deleteIssue = async (id) => {
+  const response = await authFetch(`/issues/${id}/`, {
     method: "DELETE",
   });
+  // Handle both 200 (with body) and 204 (no content) responses
+  return response;
+};

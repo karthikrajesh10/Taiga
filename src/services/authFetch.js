@@ -24,5 +24,17 @@ export async function authFetch(url, options = {}) {
     throw new Error(errorData.detail || "Something went wrong");
   }
 
-  return response.json();
+  // Handle 204 No Content (common for DELETE operations)
+  if (response.status === 204) {
+    return null;
+  }
+
+  // Try to parse JSON, but handle empty responses
+  const contentType = response.headers.get("content-type");
+  if (contentType && contentType.includes("application/json")) {
+    const text = await response.text();
+    return text ? JSON.parse(text) : null;
+  }
+
+  return response.text();
 }

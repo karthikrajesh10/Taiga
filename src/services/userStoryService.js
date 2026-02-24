@@ -130,7 +130,10 @@ export const updateStory = async (id, data) =>
 
 /* ================= DELETE STORY ================= */
 
-export const deleteStory = async (id) =>
-  await authFetch(`/userstories/${id}/`, {
+export const deleteStory = async (id) => {
+  const response = await authFetch(`/userstories/${id}/`, {
     method: "DELETE",
   });
+  // Handle both 200 (with body) and 204 (no content) responses
+  return response;
+};

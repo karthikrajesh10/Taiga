@@ -15,7 +15,10 @@ export const getProjectMembers = async (projectId) =>
 
 /* ================= REMOVE MEMBER ================= */
 
-export const removeMember = async (id) =>
-  await authFetch(`/memberships/${id}/`, {
+export const removeMember = async (id) => {
+  const response = await authFetch(`/memberships/${id}/`, {
     method: "DELETE",
   });
+  // Handle both 200 (with body) and 204 (no content) responses
+  return response;
+};

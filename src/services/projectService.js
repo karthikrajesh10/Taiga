@@ -47,3 +47,31 @@ export const createProject = async (data) => {
     body: JSON.stringify(data),
   });
 };
+
+/**
+ * Resolve a project by slug.
+ *
+ * Some backends ignore the `?slug=` filter and return an array of projects; in that
+ * case we must find the matching slug client-side to avoid accidentally selecting
+ * the first project (often id=1).
+ */
+export const getProjectBySlug = async (slug) => {
+  if (!slug) return null;
+
+  const encoded = encodeURIComponent(slug);
+  const data = await authFetch(`/projects/?slug=${encoded}`);
+
+  if (Array.isArray(data)) {
+    return data.find((p) => p?.slug === slug) || null;
+  }
+
+  // If the backend returns a single project object, just return it.
+  return data || null;
+};
+
+export const getProjectIdBySlug = async (slug) => {
+  const project = await getProjectBySlug(slug);
+  const id = project?.id;
+  if (!id) return null;
+  return id;
+};

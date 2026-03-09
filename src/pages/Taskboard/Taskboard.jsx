@@ -333,7 +333,7 @@ export default function Taskboard() {
                           </div>
 
                           <div className="task-title">{task.title}</div>
-                          <div className="task-meta">Not assigned</div>
+                          <div className="task-meta"></div>
                         </div>
                       ))}
                     </div>

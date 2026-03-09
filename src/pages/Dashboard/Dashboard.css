@@ -189,3 +189,26 @@
   color: #7a7f87;
   margin-top: 4px;
 }
+
+.dashboard__actions {
+  display: flex;
+  gap: 10px;
+}
+
+.dashboard__create-user {
+  background: #2f80ed;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.dashboard__assign-roles {
+  background: #27ae60;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}

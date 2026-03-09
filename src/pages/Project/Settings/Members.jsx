@@ -421,8 +421,9 @@
 // src/pages/Settings/Members/Members.jsx
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { authFetch } from "../../../services/authFetch";
+// import { authFetch } from "../../../services/authFetch";
 import { getProjectMembers, removeMember } from "../../../services/membershipService";
+import { getProjectIdBySlug } from "../../../services/projectService";
 
 import InviteMemberModal from "../../../components/InviteMemberModal/InviteMemberModal";
 import "./Members.css";
@@ -431,6 +432,7 @@ export default function Members() {
   const { slug } = useParams();
 
   const [projectId, setProjectId] = useState(null);
+  const [projectLoadError, setProjectLoadError] = useState("");
   const [members, setMembers] = useState([]);
   const [showInvite, setShowInvite] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -442,12 +444,20 @@ export default function Members() {
       if (!slug) return;
 
       try {
-        const data = await authFetch(`/projects/?slug=${slug}`);
-        if (Array.isArray(data) && data.length > 0) {
-          setProjectId(data[0].id);
+        setProjectLoadError("");
+        setProjectId(null);
+        setMembers([]);
+
+        const id = await getProjectIdBySlug(slug);
+        if (!id) {
+          setProjectLoadError(`Project not found for slug "${slug}"`);
+          return;
         }
+
+        setProjectId(id);
       } catch (err) {
         console.error("Failed to load project", err);
+        setProjectLoadError(err?.message || "Failed to load project");
       }
     }
 
@@ -533,6 +543,10 @@ export default function Members() {
           <span>Status</span>
           <span>Actions</span>
         </div>
+
+        {projectLoadError && (
+          <div className="members__empty">{projectLoadError}</div>
+        )}
 
         {loading && (
           <div className="members__empty">Loading members…</div>

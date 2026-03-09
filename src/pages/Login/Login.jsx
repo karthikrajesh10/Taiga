@@ -125,9 +125,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { login as loginAPI } from "../../services/authService";
-import taigaLogo from "../../assets/icons/taiga_logo_captioned.svg";
+// import taigaLogo from "../../assets/icons/taiga_logo_captioned.svg";
 import ashokLogo from "../../assets/icons/Ashok_Leyland.svg"
 import "./Login.css";
+import { Link } from "react-router-dom";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -147,6 +148,8 @@ export default function Login() {
       // Store both tokens
       login(data.access, data.refresh);
 
+      localStorage.setItem("user", JSON.stringify(data.user));
+
       navigate("/dashboard");
     } catch (err) {
       setError("Invalid username or password");
@@ -156,7 +159,10 @@ export default function Login() {
   return (
     <div className="login">
       <div className="login__container">
-        <img src={ashokLogo} alt="Taiga" className="login__logo" />
+        {/* <img src={ashokLogo} alt="Taiga" className="login__logo" /> */}
+        <Link to="/discover">
+          <img src={ashokLogo} alt="Taiga" className="login__logo" />
+        </Link>
 
         <div className="login__tagline">PROJECT MANAGEMENT TOOL</div>
 

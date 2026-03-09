@@ -331,9 +331,11 @@ import ProtectedRoute from "./ProtectedRoute";
 /* ================= PUBLIC ================= */
 import Discover from "../pages/Discover/Discover";
 import Login from "../pages/Login/Login";
+import Signup from "../pages/Signup/Signup";
 
 /* ================= DASHBOARD ================= */
 import Dashboard from "../pages/Dashboard/Dashboard";
+import AssignRoles from "../pages/AssignRoles/AssignRoles";
 
 import UserSettingsLayout from "../pages/UserSettings/UserSettingsLayout";
 import UserProfile from "../pages/UserSettings/UserProfile";
@@ -395,6 +397,7 @@ export default function AppRoutes() {
       {/* ========= PUBLIC ========= */}
       <Route path="/" element={<Discover />} />
       <Route path="/discover" element={<Discover />} />
+      <Route path="/signup" element={<Signup />} />
       <Route path="/login" element={<Login />} />
 
       {/* ========= DASHBOARD (AFTER LOGIN) ========= */}
@@ -403,6 +406,14 @@ export default function AppRoutes() {
         element={
           <ProtectedRoute>
             <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/assign-roles"
+        element={
+          <ProtectedRoute>
+            <AssignRoles />
           </ProtectedRoute>
         }
       />

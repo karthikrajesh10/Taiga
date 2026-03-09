@@ -10,6 +10,46 @@
   margin-bottom: 24px;
 }
 
+/* Button container */
+.discover__actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+/* Base button style */
+.discover__btn {
+  padding: 10px 22px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.25s ease;
+}
+
+/* Login button */
+.discover__btn--login {
+  background-color: transparent;
+  border: 2px solid #00a0b0;
+  color: #00a0b0;
+}
+
+.discover__btn--login:hover {
+  background-color: #00a0b0;
+  color: white;
+}
+
+/* Signup button */
+.discover__btn--signup {
+  background-color: #00a0b0;
+  color: white;
+}
+
+.discover__btn--signup:hover {
+  background-color: #008c9e;
+}
+
 .discover__content {
   display: flex;
   gap: 24px;

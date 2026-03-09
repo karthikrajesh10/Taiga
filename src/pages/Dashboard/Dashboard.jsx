@@ -188,6 +188,9 @@ export default function Dashboard() {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [tasksLoading, setTasksLoading] = useState(true);
+  const user = JSON.parse(localStorage.getItem("user"));
+  const isPM = user?.role === "PM";
+  const isSuperAdmin = user?.is_superuser === true;
 
   useEffect(() => {
     getProjects()
@@ -210,7 +213,7 @@ export default function Dashboard() {
       <Header variant="dashboard" />
 
       <main className="dashboard">
-        <div className="dashboard__header">
+        {/* <div className="dashboard__header">
           <h1 className="dashboard__title">Projects Dashboard</h1>
 
           <button
@@ -219,6 +222,38 @@ export default function Dashboard() {
           >
             + New project
           </button>
+        </div> */}
+        <div className="dashboard__header">
+          <h1 className="dashboard__title">Projects Dashboard</h1>
+
+          <div className="dashboard__actions">
+
+            {(isPM || isSuperAdmin) && (
+              <>
+                <button
+                  className="dashboard__create-user"
+                  onClick={() => navigate("/signup")}
+                >
+                  + Create User
+                </button>
+
+                <button
+                  className="dashboard__assign-roles"
+                  onClick={() => navigate("/assign-roles")}
+                >
+                  Assign Roles
+                </button>
+              </>
+            )}
+
+            <button
+              className="dashboard__new-project"
+              onClick={() => navigate("/project/new")}
+            >
+              + New project
+            </button>
+
+          </div>
         </div>
 
         <Tabs tabs={["Working on", "Watching"]} active="Working on" />

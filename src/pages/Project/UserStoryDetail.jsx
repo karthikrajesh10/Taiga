@@ -235,7 +235,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import TaskCreateModal from "../../components/TaskCreateModal/TaskCreateModal";
-import { authFetch } from "../../services/authFetch";
+// import { authFetch } from "../../services/authFetch";
 
 import {
   getStory,
@@ -252,6 +252,7 @@ import {
 import {
   getProjectMembers
 } from "../../services/membershipService";
+import { getProjectIdBySlug } from "../../services/projectService";
 
 import "./UserStoryDetail.css";
 
@@ -288,10 +289,8 @@ export default function UserStoryDetail() {
     const loadProject = async () => {
       if (!slug) return;
       try {
-        const data = await authFetch(`/projects/?slug=${slug}`);
-        if (Array.isArray(data) && data.length > 0) {
-          setProjectId(data[0].id);
-        }
+        const id = await getProjectIdBySlug(slug);
+        setProjectId(id || null);
       } catch (err) {
         console.error("Failed to load project", err);
       }

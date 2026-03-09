@@ -46,12 +46,28 @@ export default function Discover() {
 
         <SearchBar />
 
-        <button
+        {/* <button
           className="discover__login"
           onClick={() => navigate("/login")}
         >
           Login
         </button>
+        <button
+          className="discover__login"
+          onClick={() => navigate("/signup")}
+        >
+          SignUp
+        </button> */}
+        <div className="discover__actions">
+          <button
+            className="discover__btn discover__btn--login"
+            onClick={() => navigate("/login")}
+          >
+            Login
+          </button>
+
+          
+        </div>
 
         <div className="discover__content">
           <EmptyStateCard

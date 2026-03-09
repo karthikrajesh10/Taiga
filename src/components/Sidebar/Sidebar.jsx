@@ -1,6 +1,7 @@
 import { useState,useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { authFetch } from "../../services/authFetch";
+import { getProjectBySlug } from "../../services/projectService";
 
 import "./Sidebar.css";
 
@@ -55,13 +56,8 @@ export default function Sidebar() {
   useEffect(() => {
       const loadProject = async () => {
         try {
-          const data = await authFetch(`/projects/?slug=${slug}`);
-          if (Array.isArray(data)) {
-            const bySlug = data.find((p) => p.slug === slug);
-            setProject(bySlug || data[0] || null);
-          } else {
-            setProject(data || null);
-          }
+          const bySlug = await getProjectBySlug(slug);
+          setProject(bySlug);
 
         } catch (err) {
           console.error(err);

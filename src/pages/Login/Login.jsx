@@ -125,6 +125,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { login as loginAPI } from "../../services/authService";
+
+import { microsoftLogin } from '../../services/microsoftAuthService';
+import { loginWithMicrosoft } from '../../services/authService';
 // import taigaLogo from "../../assets/icons/taiga_logo_captioned.svg";
 import ashokLogo from "../../assets/icons/Ashok_Leyland.svg"
 import "./Login.css";
@@ -153,6 +156,31 @@ export default function Login() {
       navigate("/dashboard");
     } catch (err) {
       setError("Invalid username or password");
+    }
+  };
+  // const handleMicrosoftLogin = async () => {
+  //   try {
+  //     const msToken = await microsoftLogin();
+  //     const data = await loginWithMicrosoft(msToken);
+  //     login(data.access, data.refresh);
+  //     localStorage.setItem('user', JSON.stringify(data.user));
+  //     navigate('/dashboard');
+  //   } catch (err) {
+  //     setError('Microsoft login failed. Please try again.');
+  //   }
+  // };
+  const handleMicrosoftLogin = async () => {
+    try {
+      const msToken = await microsoftLogin();
+      console.log("MS Token received:", msToken); // check if token arrives
+      const data = await loginWithMicrosoft(msToken);
+      console.log("Backend response:", data);
+      login(data.access, data.refresh);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      navigate('/dashboard');
+    } catch (err) {
+      console.error("Microsoft login error:", err); // see actual error
+      setError('Microsoft login failed. Please try again.');
     }
   };
 
@@ -190,6 +218,13 @@ export default function Login() {
             LOGIN
           </button>
         </form>
+        <button
+            type="button"
+            className="login__button login__button--microsoft"
+            onClick={handleMicrosoftLogin}
+          >
+            Sign in with Microsoft
+          </button>
       </div>
     </div>
   );

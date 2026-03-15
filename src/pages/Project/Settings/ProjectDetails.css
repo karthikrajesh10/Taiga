@@ -4,125 +4,6 @@
   margin-bottom: 24px;
 }
 
-.project-details__layout {
-  display: grid;
-  grid-template-columns: 260px 1fr;
-  gap: 40px;
-}
-
-/* LEFT */
-.project-details__logo {
-  text-align: center;
-}
-
-.logo-box {
-  width: 160px;
-  height: 160px;
-  background: #e0a3a3;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  font-weight: bold;
-  margin-bottom: 12px;
-}
-
-/* FORM */
-.form-group {
-  margin-bottom: 16px;
-}
-
-.form-group label {
-  display: block;
-  font-size: 13px;
-  color: #6b778c;
-  margin-bottom: 4px;
-}
-
-.form-group input,
-.form-group textarea {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #dfe1e6;
-  border-radius: 4px;
-}
-
-.owner {
-  margin: 16px 0;
-}
-
-.owner-card {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 8px;
-}
-
-.avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 4px;
-  background: #e0a3a3;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.toggle-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 12px 0;
-}
-
-.visibility {
-  display: flex;
-  gap: 8px;
-  margin: 16px 0;
-}
-
-/* BUTTONS */
-.primary-btn {
-  background: #00bfa5;
-  color: #fff;
-  padding: 8px 14px;
-  border: none;
-  border-radius: 4px;
-}
-
-.secondary-btn {
-  background: #e9edf3;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 4px;
-}
-
-.link-btn {
-  background: none;
-  border: none;
-  color: #00a0b0;
-  cursor: pointer;
-}
-
-.save-btn {
-  margin-top: 16px;
-  background: #00bfa5;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
-}
-
-.danger-link {
-  margin-top: 12px;
-  background: none;
-  border: none;
-  color: #de350b;
-  cursor: pointer;
-}
-
-
 .page-title {
   font-size: 22px;
   font-weight: 600;
@@ -136,7 +17,11 @@
   gap: 48px;
 }
 
-/* Logo */
+/* ── LEFT: Logo ── */
+.project-details__logo {
+  text-align: center;
+}
+
 .logo-box {
   width: 180px;
   height: 180px;
@@ -145,21 +30,205 @@
   align-items: center;
   justify-content: center;
   color: #fff;
-  font-size: 14px;
+  font-size: 48px;
+  font-weight: bold;
   margin-bottom: 12px;
+  border-radius: 4px;
 }
 
-/* Toggles */
-.toggle-row {
+/* ── FORM ── */
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 13px;
+  color: #6b778c;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1.5px solid #7c5cbf;
+  border-radius: 4px;
   font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+  resize: vertical;
 }
 
-/* Buttons */
+/* ── Inline editable field display ── */
+.field-display {
+  padding: 8px 10px;
+  border: 1.5px solid transparent;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #172b4d;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  background: transparent;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.field-display--multiline {
+  align-items: flex-start;
+  min-height: 80px;
+  white-space: pre-wrap;
+}
+
+.field-display--editable {
+  cursor: pointer;
+  border-color: #dfe1e6;
+}
+
+.field-display--editable:hover {
+  border-color: #7c5cbf;
+  background: #f8f5ff;
+}
+
+.field-display--editable:hover .edit-hint {
+  opacity: 1;
+}
+
+.edit-hint {
+  font-size: 13px;
+  color: #7c5cbf;
+  opacity: 0;
+  transition: opacity 0.15s;
+  flex-shrink: 0;
+}
+
+.placeholder {
+  color: #aaa;
+  font-style: italic;
+}
+
+/* ── Owner ── */
+.owner {
+  margin: 16px 0;
+}
+
+.owner strong {
+  font-size: 13px;
+  color: #6b778c;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.owner-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 4px;
+  background: #e0a3a3;
+  color: #fff;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+}
+
+.name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #172b4d;
+}
+
+/* ── Toggles ── */
+.toggle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 12px 0;
+  font-size: 14px;
+  color: #344563;
+}
+
+/* ── Visibility ── */
+.visibility {
+  display: flex;
+  gap: 8px;
+  margin: 16px 0;
+}
+
 .visibility button {
   min-width: 140px;
 }
 
+/* ── Buttons ── */
+.primary-btn {
+  background: #00bfa5;
+  color: #fff;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.secondary-btn {
+  background: #e9edf3;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: #00a0b0;
+  cursor: pointer;
+  font-size: 13px;
+  padding: 0;
+}
+
+.save-btn {
+  margin-top: 16px;
+  background: #00bfa5;
+  color: #fff;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: block;
+}
+
+.save-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .danger-link {
   display: block;
-  margin-top: 16px;
+  margin-top: 12px;
+  background: none;
+  border: none;
+  color: #de350b;
+  cursor: pointer;
+  font-size: 13px;
+  padding: 0;
+}
+
+.danger-link:hover {
+  text-decoration: underline;
 }

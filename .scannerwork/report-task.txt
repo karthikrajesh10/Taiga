@@ -1,0 +1,6 @@
+projectKey=AL-PMT-FRONTEND
+serverUrl=http://localhost:9000
+serverVersion=26.3.0.120487
+dashboardUrl=http://localhost:9000/dashboard?id=AL-PMT-FRONTEND
+ceTaskId=6151d84f-e9fe-4f98-964e-1ce65a35d49c
+ceTaskUrl=http://localhost:9000/api/ce/task?id=6151d84f-e9fe-4f98-964e-1ce65a35d49c

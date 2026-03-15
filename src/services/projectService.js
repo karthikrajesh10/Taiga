@@ -75,3 +75,16 @@ export const getProjectIdBySlug = async (slug) => {
   if (!id) return null;
   return id;
 };
+
+export const updateProject = async (projectId, data) => {
+  return await authFetch(`/projects/${projectId}/`, {
+    method: "PATCH",
+    body: JSON.stringify(data),
+  });
+};
+
+export const deleteProject = async (projectId) => {
+  return await authFetch(`/projects/${projectId}/`, {
+    method: "DELETE",
+  });
+};

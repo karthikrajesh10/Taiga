@@ -473,6 +473,8 @@ export default function Backlog() {
 
   const navigate = useNavigate();
   const { slug } = useParams();
+  const user = JSON.parse(localStorage.getItem("user"));
+  const canDelete = user?.is_superuser === true || user?.role === "PM" || user?.role === "Manager";
 
   /* ================= LOAD BACKLOG ================= */
 
@@ -670,12 +672,15 @@ export default function Backlog() {
                           >
                             #{story.id} {story.title}
                           </span>
-                          <button
-                            className="remove-btn"
-                            onClick={() => removeFromSprint(story.id)}
-                          >
-                            Remove
-                          </button>
+                          {canDelete && (
+                            <button
+                              className="remove-btn"
+                              title="Remove from sprint"
+                              onClick={() => removeFromSprint(story.id)}
+                            >
+                              Remove
+                            </button>
+                          )}
                         </div>
                       ))
                     )}

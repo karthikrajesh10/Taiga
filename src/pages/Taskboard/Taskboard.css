@@ -218,3 +218,37 @@
   font-weight: 600;
   color: #2e3440;
 }
+
+.task-title {
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+.task-title:hover {
+  background: rgba(0,0,0,0.06);
+}
+.task-title-input {
+  width: 100%;
+  font-size: 0.85rem;
+  padding: 2px 4px;
+  border: 1px solid #7c5cbf;
+  border-radius: 3px;
+  outline: none;
+}
+.task-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+  font-size: 0.75rem;
+  color: #666;
+}
+.task-assign-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.8rem;
+  color: #7c5cbf;
+  padding: 0 2px;
+}
+.task-assign-btn:hover { opacity: 0.7; }

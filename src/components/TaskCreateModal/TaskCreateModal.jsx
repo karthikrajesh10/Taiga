@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { createTask } from "../../services/taskService";
-import { stringToStatusNumber } from "../../utils/statusMapping";
+// import { stringToStatusNumber } from "../../utils/statusMapping";
 
 import "./TaskCreateModal.css";
 
 export default function TaskCreateModal({
-  projectSlug,
+  // projectSlug,
   userstoryId,
   onClose,
   onCreated,
@@ -69,7 +69,7 @@ export default function TaskCreateModal({
             </div>
           </div>
 
-          <button className="add-tag">Add tag +</button>
+          {/* <button className="add-tag">Add tag +</button> */}
 
           <textarea
             className="task-description"
@@ -78,7 +78,7 @@ export default function TaskCreateModal({
             onChange={(e) => setDescription(e.target.value)}
           />
 
-          {/* ATTACHMENTS PLACEHOLDER */}
+          {/* ATTACHMENTS PLACEHOLDER
           <div className="attachments">
             <div className="attachments-header">
               <span>0 Attachments</span>
@@ -87,7 +87,7 @@ export default function TaskCreateModal({
             <div className="drop-area">
               Drop attachments here!
             </div>
-          </div>
+          </div> */}
         </div>
 
         {/* FOOTER */}

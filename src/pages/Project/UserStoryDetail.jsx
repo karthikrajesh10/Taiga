@@ -279,6 +279,9 @@ export default function UserStoryDetail() {
   const [assigningTaskId, setAssigningTaskId] = useState(null);
   const [members, setMembers] = useState([]);
   const [assigningUsers, setAssigningUsers] = useState(new Set());
+  const user = JSON.parse(localStorage.getItem("user"));
+  const canDelete = user?.is_superuser === true || user?.role === "PM" || user?.role === "Manager";
+  
 
   useEffect(() => {
     loadStory();
@@ -555,13 +558,15 @@ export default function UserStoryDetail() {
                       >
                         Assign to
                       </button>
-                      <button
-                        className="us-delete-btn"
-                        onClick={() => handleDeleteTask(task.id)}
-                        title="Delete task"
-                      >
-                        Delete
-                      </button>
+                      {canDelete && (
+                        <button
+                          className="us-delete-btn"
+                          onClick={() => handleDeleteTask(task.id)}
+                          title="Delete task"
+                        >
+                          Delete
+                        </button>
+                      )}
                     </div>
                   </div>
                   );
@@ -607,11 +612,11 @@ export default function UserStoryDetail() {
               <div className="total">total points <span>?</span></div>
             </div>
 
-            <div className="assigned">
+            {/* <div className="assigned">
               <h4>ASSIGNED</h4>
               <div className="assignee">Unassigned</div>
               <button>+ Add assigned</button>
-            </div>
+            </div> */}
 
             <div className="watchers">
               <h4>WATCHERS</h4>
@@ -624,13 +629,15 @@ export default function UserStoryDetail() {
               <button>👥</button>
               <button>📁</button>
               <button>🔒</button>
-              <button
-                className="danger"
-                title="Delete user story"
-                onClick={deleteStoryDetail}
-              >
-                🗑
-              </button>
+              {canDelete && (
+                <button
+                  className="danger"
+                  title="Delete user story"
+                  onClick={deleteStoryDetail}
+                >
+                  🗑
+                </button>
+              )}
             </div>
 
           </div>

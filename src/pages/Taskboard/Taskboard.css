@@ -252,3 +252,19 @@
   padding: 0 2px;
 }
 .task-assign-btn:hover { opacity: 0.7; }
+
+
+/* ===== HOURS ===== */
+.task-hours {
+  font-size: 0.75rem;
+  color: #6b778c;
+}
+
+.task-hours-input {
+  width: 80px;
+  font-size: 0.8rem;
+  padding: 2px 4px;
+  border: 1px solid #7c5cbf;
+  border-radius: 3px;
+  outline: none;
+}

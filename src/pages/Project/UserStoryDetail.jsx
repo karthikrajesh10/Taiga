@@ -551,13 +551,15 @@ export default function UserStoryDetail() {
                       )}
                     </div>
                     <div className="us-task-actions">
-                      <button
-                        className="us-assign-btn"
-                        onClick={() => setAssigningTaskId(task.id)}
-                        title="Assign to"
-                      >
-                        Assign to
-                      </button>
+                      {canDelete && (
+                          <button
+                            className="us-assign-btn"
+                            onClick={() => setAssigningTaskId(task.id)}
+                            title="Assign to"
+                          >
+                            Assign to
+                          </button>
+                        )}
                       {canDelete && (
                         <button
                           className="us-delete-btn"
@@ -573,12 +575,14 @@ export default function UserStoryDetail() {
                 })
               )}
 
-              <button
-                className="link"
-                onClick={() => setShowTaskModal(true)}
-              >
-                + Add Task
-              </button>
+              {canDelete && (
+                <button
+                  className="link"
+                  onClick={() => setShowTaskModal(true)}
+                >
+                  + Add Task
+                </button>
+              )}
             </div>
 
             {/* ATTACHMENTS */}

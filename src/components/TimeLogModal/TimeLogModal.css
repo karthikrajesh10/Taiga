@@ -1,0 +1,266 @@
+.timelog-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.timelog-modal {
+  background: #fff;
+  border-radius: 12px;
+  width: 640px;
+  max-width: 95vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 28px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ── Header ── */
+.timelog-modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.timelog-modal__header h2 {
+  margin: 0 0 4px;
+  font-size: 1.2rem;
+  color: #2e3440;
+}
+
+.timelog-modal__subtitle {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #6b778c;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 460px;
+}
+
+.timelog-close {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: #6b778c;
+  padding: 2px 6px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.timelog-close:hover {
+  background: #f0f0f0;
+  color: #2e3440;
+}
+
+/* ── Form ── */
+.timelog-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: #f7f9fb;
+  border: 1px solid #e6eaef;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.timelog-form__row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+.timelog-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+}
+
+.timelog-form__field--hours {
+  flex: 0 0 72px;
+  align-items: center;
+}
+
+.timelog-form__field label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #4c566a;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.optional {
+  font-weight: 400;
+  color: #bbb;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.timelog-form__field input[type="date"],
+.timelog-form__field input[type="time"],
+.timelog-form__field input[type="text"] {
+  padding: 8px 10px;
+  border: 1px solid #dde1e7;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.15s;
+  color: #2e3440;
+}
+
+.timelog-form__field input:focus {
+  border-color: #7c5cbf;
+  box-shadow: 0 0 0 2px rgba(124, 92, 191, 0.12);
+}
+
+.timelog-hours-badge {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #bbb;
+  padding: 6px 0;
+  transition: color 0.2s;
+}
+
+.timelog-hours-badge--active {
+  color: #7c5cbf;
+}
+
+.timelog-error {
+  color: #d9534f;
+  font-size: 0.85rem;
+  margin: 0;
+  padding: 6px 10px;
+  background: #fff5f5;
+  border-radius: 4px;
+  border-left: 3px solid #d9534f;
+}
+
+.timelog-submit {
+  align-self: flex-end;
+  background: #7c5cbf;
+  color: #fff;
+  border: none;
+  padding: 9px 24px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.timelog-submit:hover:not(:disabled) {
+  background: #6a4daa;
+}
+
+.timelog-submit:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ── History ── */
+.timelog-history__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.timelog-history__header h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #2e3440;
+  margin: 0;
+}
+
+.timelog-total-badge {
+  background: #ede9f6;
+  color: #7c5cbf;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 12px;
+}
+
+.timelog-empty {
+  font-size: 0.85rem;
+  color: #aaa;
+  margin: 0;
+  padding: 12px 0;
+}
+
+.timelog-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.timelog-table th {
+  text-align: left;
+  padding: 6px 10px;
+  color: #6b778c;
+  font-weight: 700;
+  border-bottom: 2px solid #e6eaef;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.timelog-table td {
+  padding: 9px 10px;
+  border-bottom: 1px solid #f0f0f0;
+  color: #2e3440;
+  vertical-align: middle;
+}
+
+.timelog-table tbody tr:hover {
+  background: #fafafa;
+}
+
+.timelog-table tfoot td {
+  border-top: 2px solid #e6eaef;
+  border-bottom: none;
+  padding-top: 10px;
+  color: #2e3440;
+}
+
+.timelog-hours-cell {
+  background: #ede9f6;
+  color: #7c5cbf;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+}
+
+.timelog-comment {
+  color: #6b778c;
+  max-width: 160px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.timelog-delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+  opacity: 0.5;
+  padding: 2px 4px;
+  border-radius: 4px;
+  transition: opacity 0.15s;
+}
+
+.timelog-delete-btn:hover:not(:disabled) {
+  opacity: 1;
+}

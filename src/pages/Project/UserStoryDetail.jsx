@@ -543,7 +543,13 @@ export default function UserStoryDetail() {
                   <div key={task.id} className="us-task-row">
                     <div className="us-task-info">
                       <span className="us-task-id">#{task.id}</span>
-                      <span className="us-task-title">{task.title}</span>
+                      <span
+                        className="us-task-title"
+                        style={{ cursor: 'pointer', color: '#000000; ' }}  // Adding pointer cursor and link color
+                        onClick={() => navigate(`/project/${slug}/task/${task.id}`)}  // This is the navigation logic
+                      >
+                        {task.title}
+                      </span>
                       {assigneeName && (
                         <span className="us-task-assignee">
                           Assigned to: {assigneeName}

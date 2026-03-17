@@ -140,3 +140,6 @@ export const deleteTask = async (taskId) => {
   // Handle both 200 (with body) and 204 (no content) responses
   return response;
 };
+
+export const getTask = async (taskId) =>
+  await authFetch(`/tasks/${taskId}/`);

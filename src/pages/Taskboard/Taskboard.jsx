@@ -837,7 +837,9 @@ import { getProjectMembers } from "../../services/membershipService";
 import { getProjectIdBySlug } from "../../services/projectService";
 
 import TaskCreateModal from "../../components/TaskCreateModal/TaskCreateModal";
+import TimeLogModal from "../../components/TimeLogModal/TimeLogModal";
 import "./Taskboard.css";
+
 
 const STATUS_COLUMNS = [
   { key: 1, label: "NEW" },
@@ -883,7 +885,11 @@ export default function Taskboard() {
   // Inline task editing
   const [editingTask, setEditingTask] = useState(null); // { id, title }
   const [editingEstimatedHours, setEditingEstimatedHours] = useState(null); // { id, value }
-  const [editingActualHours, setEditingActualHours] = useState(null); // { id, value }
+  // const [editingActualHours, setEditingActualHours] = useState(null); // { id, value }
+
+  const [timeLogTask, setTimeLogTask] = useState(null);
+
+  
 
   /* ================= LOAD DATA ================= */
   useEffect(() => {
@@ -976,28 +982,38 @@ export default function Taskboard() {
       setEditingEstimatedHours(null);
     }
   };
-
-  /* ================= ACTUAL HOURS EDIT ================= */
-  const handleSaveActualHours = async (taskId, value) => {
-    const parsed = parseFloat(value);
-    if (isNaN(parsed) || parsed < 0) {
-      setEditingActualHours(null);
-      return;
-    }
-    try {
-      await updateTask(taskId, { actual_hours: parsed });
+  const handleTimeLogged = (log) => {
+      if (!timeLogTask) return;
       setTasks((prev) =>
         prev.map((t) =>
-          t.id === taskId ? { ...t, actual_hours: parsed } : t
+          t.id === timeLogTask.id
+            ? { ...t, actual_hours: (t.actual_hours || 0) + (log?.worked_hours || 0) }
+            : t
         )
       );
-    } catch (err) {
-      console.error("Failed to update actual hours", err);
-      alert("Failed to save actual hours.");
-    } finally {
-      setEditingActualHours(null);
-    }
-  };
+    };
+
+  /* ================= ACTUAL HOURS EDIT ================= */
+  // const handleSaveActualHours = async (taskId, value) => {
+  //   const parsed = parseFloat(value);
+  //   if (isNaN(parsed) || parsed < 0) {
+  //     setEditingActualHours(null);
+  //     return;
+  //   }
+  //   try {
+  //     await updateTask(taskId, { actual_hours: parsed });
+  //     setTasks((prev) =>
+  //       prev.map((t) =>
+  //         t.id === taskId ? { ...t, actual_hours: parsed } : t
+  //       )
+  //     );
+  //   } catch (err) {
+  //     console.error("Failed to update actual hours", err);
+  //     alert("Failed to save actual hours.");
+  //   } finally {
+  //     setEditingActualHours(null);
+  //   }
+  // };
 
   /* ================= ASSIGN TASK ================= */
   const handleAssignTask = async (taskId, userId) => {
@@ -1215,16 +1231,23 @@ export default function Taskboard() {
                                 }}
                               />
                             ) : (
+                              // <div
+                              //   className="task-title"
+                              //   title="Click to edit"
+                              //   onClick={() =>
+                              //     canEdit &&
+                              //     setEditingTask({
+                              //       id: task.id,
+                              //       title: task.title,
+                              //     })
+                              //   }
+                              // >
+                              //   {task.title}
+                              // </div>
                               <div
                                 className="task-title"
-                                title="Click to edit"
-                                onClick={() =>
-                                  canEdit &&
-                                  setEditingTask({
-                                    id: task.id,
-                                    title: task.title,
-                                  })
-                                }
+                                title="Open task detail"
+                                onClick={() => navigate(`/project/${slug}/task/${task.id}`)}
                               >
                                 {task.title}
                               </div>
@@ -1307,7 +1330,23 @@ export default function Taskboard() {
                             </div>
 
                             {/* ── ACTUAL HOURS ── */}
-                            <div className="task-meta">
+                            {/* ── ACTUAL HOURS ── */}
+                              <div className="task-meta">
+                                <span className="task-hours">
+                                  ⏱ Actual:{" "}
+                                  {task.actual_hours != null ? `${task.actual_hours}h` : "—"}
+                                </span>
+                                {canEditActualHours && (
+                                  <button
+                                    className="task-assign-btn"
+                                    title="Log actual hours"
+                                    onClick={() => setTimeLogTask(task)}
+                                  >
+                                    ✎
+                                  </button>
+                                )}
+                              </div>
+                            {/* <div className="task-meta">
                               {editingActualHours?.id === task.id ? (
                                 <input
                                   className="task-hours-input"
@@ -1360,7 +1399,7 @@ export default function Taskboard() {
                                   ✎
                                 </button>
                               )}
-                            </div>
+                            </div> */}
 
                           </div>
                         );
@@ -1396,6 +1435,16 @@ export default function Taskboard() {
           userstoryId={activeStory.id}
           onClose={() => setActiveStory(null)}
           onCreated={(task) => setTasks((prev) => [...prev, task])}
+        />
+      )}
+      {/* ===== TIME LOG MODAL ===== */}
+      {timeLogTask && (
+        <TimeLogModal
+          task={timeLogTask}
+          projectId={sprint?.project ?? null}
+          sprintId={sprintId}
+          onClose={() => setTimeLogTask(null)}
+          onLogged={handleTimeLogged}
         />
       )}
 

@@ -357,7 +357,9 @@ import Issues from "../pages/Project/Issues";
 import Team from "../pages/Project/Team";
 import IssueDetail from "../pages/Project/IssueDetail";
 import UserStoryDetail from "../pages/Project/UserStoryDetail";
+
 import Taskboard from "../pages/Taskboard/Taskboard";
+import TaskDetail from "../pages/Taskboard/TaskDetail";
 
 /* ================= SETTINGS ================= */
 import SettingsLayout from "../pages/Project/Settings/SettingsLayout";
@@ -488,6 +490,7 @@ export default function AppRoutes() {
         <Route path="taskboard/:sprintId" element={<Taskboard/>} />
         <Route path="backlog" element={<Backlog />} />
         <Route path="us/:id" element={<UserStoryDetail />} />
+        <Route path="task/:taskId" element={<TaskDetail />} />
         <Route path="issues" element={<Issues />} />
         <Route path="issue/:id" element={<IssueDetail />} />
         <Route path="team" element={<Team />} />

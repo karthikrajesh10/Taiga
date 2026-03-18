@@ -102,9 +102,9 @@ export default function Sidebar() {
             </div>
           ))}
 
-          {/* <div className="sidebar__subitem" onClick={goToTimeline}>
+          <div className="sidebar__subitem" onClick={goToTimeline}>
             Timeline
-          </div> */}
+          </div>
         </>
       )}
       {/* ISSUES */}
@@ -115,9 +115,9 @@ export default function Sidebar() {
       <div className="sidebar__divider" />
 
       {/* FUTURE */}
-      {/* <div className="sidebar__item" onClick={goToSearch}>Search</div>
+      <div className="sidebar__item" onClick={goToSearch}>Search</div>
       <div className="sidebar__item" onClick={goToWiki}>Wiki</div>
-      <div className="sidebar__item" onClick={goToTeam}>Team</div> */}
+      <div className="sidebar__item" onClick={goToTeam}>Team</div>
       <div className="sidebar__item" onClick={goToSettings}>Settings</div>
     </aside>
   );

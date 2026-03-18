@@ -459,7 +459,7 @@ export default function TaskDetail() {
         {/* ══════════ RIGHT ══════════ */}
         <div className="td-right">
 
-          {/* Log time form */}
+          {/* Log time form
           {canEditActualHours && (
             <div className="td-timelog-form">
               <h3 className="td-section-title">Log Time</h3>
@@ -521,7 +521,7 @@ export default function TaskDetail() {
                   : `Log ${workedHours != null ? workedHours + "h" : "Time"}`}
               </button>
             </div>
-          )}
+          )} */}
 
           {/* Log history */}
           <div className="td-log-history">

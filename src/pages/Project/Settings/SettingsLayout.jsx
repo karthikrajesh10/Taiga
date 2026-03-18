@@ -170,21 +170,21 @@ import "./SettingsLayout.css";
 const SETTINGS_GROUPS = {
   PROJECT: [
     { label: "Project details", path: "project-profile/details" },
-    { label: "Presets", path: "project-profile/presets" },
-    { label: "Modules", path: "project-profile/modules" },
-    { label: "Export", path: "project-profile/export" },
-    { label: "Reports", path: "project-profile/reports" },
+    // { label: "Presets", path: "project-profile/presets" },
+    // { label: "Modules", path: "project-profile/modules" },
+    // { label: "Export", path: "project-profile/export" },
+    // { label: "Reports", path: "project-profile/reports" },
   ],
 
   ATTRIBUTES: [
     { label: "Statuses", path: "project-values/status" },
-    { label: "Points", path: "project-values/points" },
-    { label: "Priorities", path: "project-values/priorities" },
-    { label: "Severities", path: "project-values/severities" },
-    { label: "Types", path: "project-values/types" },
-    { label: "Custom fields", path: "project-values/custom-fields" },
-    { label: "Tags", path: "project-values/tags" },
-    { label: "Due dates", path: "project-values/due-dates" },
+    // { label: "Points", path: "project-values/points" },
+    // { label: "Priorities", path: "project-values/priorities" },
+    // { label: "Severities", path: "project-values/severities" },
+    // { label: "Types", path: "project-values/types" },
+    // { label: "Custom fields", path: "project-values/custom-fields" },
+    // { label: "Tags", path: "project-values/tags" },
+    // { label: "Due dates", path: "project-values/due-dates" },
   ],
 
   MEMBERS: [
@@ -192,21 +192,21 @@ const SETTINGS_GROUPS = {
   ],
 
   PERMISSIONS: [
-    { label: "UX", path: "roles/ux" },
-    { label: "Design", path: "roles/design" },
-    { label: "Front", path: "roles/front" },
-    { label: "Back", path: "roles/back" },
-    { label: "Product owner", path: "roles/product-owner" },
-    { label: "Stakeholder", path: "roles/stakeholder" },
-    { label: "External user", path: "roles/external-user" },
+    // { label: "UX", path: "roles/ux" },
+    // { label: "Design", path: "roles/design" },
+    // { label: "Front", path: "roles/front" },
+    // { label: "Back", path: "roles/back" },
+    // { label: "Product owner", path: "roles/product-owner" },
+    // { label: "Stakeholder", path: "roles/stakeholder" },
+    // { label: "External user", path: "roles/external-user" },
   ],
 
   INTEGRATIONS: [
-    { label: "Webhooks", path: "third-parties/webhooks" },
-    { label: "GitHub", path: "third-parties/github" },
-    { label: "GitLab", path: "third-parties/gitlab" },
-    { label: "Bitbucket", path: "third-parties/bitbucket" },
-    { label: "Gogs", path: "third-parties/gogs" },
+    // { label: "Webhooks", path: "third-parties/webhooks" },
+    // { label: "GitHub", path: "third-parties/github" },
+    // { label: "GitLab", path: "third-parties/gitlab" },
+    // { label: "Bitbucket", path: "third-parties/bitbucket" },
+    // { label: "Gogs", path: "third-parties/gogs" },
   ],
 };
 

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 // import { authFetch } from "../../services/api";
 import { authFetch } from "../../services/authFetch";
-
+import { updateIssue } from "../../services/issueService";
 
 
 
@@ -53,7 +53,16 @@ export default function Issues() {
         throw err;
       }
     };
-
+    const onStatusChange = async (issueId, newStatus) => {
+      try {
+        const updated = await updateIssue(issueId, { status: Number(newStatus) });
+        setIssues((prev) =>
+          prev.map((issue) => (issue.id === issueId ? { ...issue, ...updated } : issue))
+        );
+      } catch (err) {
+        console.error("Failed to update status:", err);
+      }
+    };
   useEffect(() => {
       const loadIssues = async () => {
         try {
@@ -153,9 +162,19 @@ export default function Issues() {
               </span>
 
                 {/* STATUS */}
-                <span className="issues__status">
+                {/* <span className="issues__status">
                   {issue.status === 1 ? 'New' : issue.status === 2 ? 'In Progress' : issue.status === 3 ? 'Ready For Test' : 'Done'} ⌄
-                </span>
+                </span> */}
+                <select
+                  className="issues__status"
+                  value={issue.status}
+                  onChange={(e) => onStatusChange(issue.id, e.target.value)}
+                >
+                  <option value={1}>New</option>
+                  <option value={2}>In Progress</option>
+                  <option value={3}>Ready For Test</option>
+                  <option value={4}>Done</option>
+                </select>
 
                 {/* MODIFIED */}
                 <span className="issues__modified">

@@ -237,7 +237,7 @@ export default function TaskDetail() {
       const newLog = await createTimeLog({
         task: parseInt(taskId),
         project: task.project ?? null,
-        sprint: task.sprint ?? null,
+        sprint: userStory?.sprint ?? null,
         date: logDate,
         worked_hours: workedHours,
         comment: logComment,
@@ -459,8 +459,8 @@ export default function TaskDetail() {
         {/* ══════════ RIGHT ══════════ */}
         <div className="td-right">
 
-          {/* Log time form
-          {canEditActualHours && (
+          {/* Log time form */}
+          {/* {canEditActualHours && (
             <div className="td-timelog-form">
               <h3 className="td-section-title">Log Time</h3>
 
